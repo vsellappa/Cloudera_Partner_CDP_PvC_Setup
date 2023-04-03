@@ -1,1 +1,161 @@
+= CDP Private Cloud Setup on AWS Infrastructure
+Puneet Joshi <puneetjoshi@cloudera.com>; Pannag Katti <pkatti@cloudera.com>
+:toc:
 
+This document provides all the required information for Cloudera Partners to setup and install CDP Private Cloud on AWS Infrastructure(*EC2*). In addition to exploring the benefits of CDP Private Cloud with its rich Data Services, this setup can also be used for *ISV/IHV* certification, getting a Hands-on experience, or for any demos with potential customers. 
+
+
+== Introduction
+
+Cloudera Data Platform is a single platform that has two form factors CDP Public and CDP Private cloud. 
+
+*CDP Public Cloud* is an integrated analytics and data management platform deployed on *cloud services*. It consists of a number of cloud services designed to address specific enterprise data cloud use cases.
+This includes Data Hub powered by Cloudera Runtime, self-service experiences (Data Warehouse, Machine Learning, and Data Engineering) running on containers, the administrative layer (Management Console), and SDX services (Data Lake, Data Catalog, Replication Manager, and Workload Manager).
+
+*CDP Private Cloud* is an integrated analytics and data management platform deployed in *private data centers*. It consists of CDP Private Cloud Base and CDP Private Cloud Data Services and offers broad data analytics and artificial intelligence functionality along with secure user access and data governance features. CDP Private Cloud (PvC) data services components run on containerized cluster and thus requires a container orchestration engine to manage all the workloads. CDP PvC offers installation with two orchestration engines. 
+
+* Openshift Container Platform
+
+* Embedded Container Service (Cloudera managed)
+
+In this document, we focus on CDP Private Cloud setup with *ECS*. Let's have a look at the prerequisites before proceeding with the actual setup.
+
+== Prerequisites
+
+*Entitlements*
+
+Your License key must have the PvC DS entitlement. A current key without the entitlement will block access to ECS bits. Please raise a ticket or reach out to the Cloudera POC to get the necessary entitlements.
+
+*AWS*
+
+Administrator access to AWS account. Please verify the resource limits in the region where you wish to deploy the cloud resources. 
+
+== Infrastructure Setup
+
+Below table summarizes the machines used for this POC. This is a minimum requirement, One can increase the number of machines to achieve High Availability and Fault Tolerance. If this cluster is not meant to perform any benchmarking or performance test, one can proceed ahead with this infrastructure.
+
+=== Hardware
+
+[frame=all, grid=all]
+|===
+|AWS Resource | Attribute | Count | CDP Role | Storage
+
+|EC2|sample|sample|FreeIPA server|sample
+
+|EC2|sample|sample|CDP Base master|sample
+
+|EC2|sample|sample|CDP Base worker|sample
+
+|EC2|sample|sample|ECS cluster|sample
+
+|Elastic IP|Cell in column 2, row 2|Cell in column 3, row 2|Static IP for all CDP UIs|Cell in column 5, row 2
+|===
+
+=== Software
+
+
+Below table summarizes the list of softwares/packages and their use for setting up CDP PvC cluster. 
+
+[frame=all, grid=all]
+|===
+|Software | Version | Node | Role | Availability 
+
+|EC2|sample|sample|FreeIPA server|sample
+
+|EC2|sample|sample|CDP Base master|sample
+|===
+
+
+=== Summary
+
+[frame=all, grid=all]
+|===
+|Software | Version | Node | Role | Availability 
+|===
+
+Once you have familiarized yourself with all the information mentioned above, you can start with the preliminary work for CDP Base setup. 
+
+== Preliminary Work
+
+Before getting into the actual installation of CDP Private Cloud Base & Data Services we need to prepare our machines and perform some steps to meet the prerequisites. 
+
+=== Create Base AMI
+
+In this step, an AMI will be created which will serve as the base AMI to provision all the EC2 instances that form the CDP PvC cluster. 
+
+==== Step1
+
+* Login to the AWS account and select the Region in which you want to deploy the cluster. 
+
+* Start a t2.micro instance by using the AMI *CentOS 7 (x86_64) - with Updates HVM* and deploy it in the Public Subnet.
+
+* Ensure that the OS version is Centos 7.9. 
+
+* To verify the version, run the below command. It should return CentOS Linux release 7.9.2009 (Core). 
+[,shell]
+----
+    cat /etc/centos-release
+----
+image::images/centos_ver.png[]
+
+
+==== Step2
+
+* *Disable SELinux:* Open the file */etc/selinux/config* for editing and update the value as shown below. 
+[,shell]
+----
+    vi /etc/selinux/config
+    SELINUX=disabled
+----
+* *Set swappiness to 1:* Open the file */etc/sysctl.conf* for editing and add the below line.
+[,shell]
+----
+    vi /etc/sysctl.conf
+    vm.swappiness=1
+----
+
+* *Disable Transparent Huge Pages:* Open the file */etc/rc.d/rc.local* for editing and add the below lines.
+[,shell]
+----
+    vi /etc/rc.d/rc.local
+    echo never > /sys/kernel/mm/transparent_hugepage/enabled
+    echo never > /sys/kernel/mm/transparent_hugepage/defrag
+----
+
+* *Disable IPV6:* Open the file */etc/rc.d/rc.local* for editing and add the below lines. 
+[,shell]
+----
+    sysctl -w net.ipv6.conf.all.disable_ipv6=1
+    sysctl -w net.ipv6.conf.default.disable_ipv6=1
+    sysctl -w net.ipv6.conf.lo.disable_ipv6=0
+----
+
+* *Add execute permission:* Run the below command to add execute permission to the file */etc/rc.d/rc.local*. 
+[,shell]
+----
+    chmod +x /etc/rc.d/rc.local
+----
+
+* *Install packages:* Install the packages *_ipa-client_*, *_wget_*, *_ntpd_* through *yum* using the below command. 
+[,shell]
+----     
+    yum install -y ipa-client wget ntpd
+----
+
+==== Step3
+
+* *Create AMI:* Open AWS console and create AMI of this machine. Once the AMI is in *"Available"* state, terminate this instance. 
+
+For all the EC2 instances to be created next, this AMI will be used. 
+
+=== Install and Setup of IPA services
+
+=== Setup Reverse DNS Zone
+
+=== Add all the machines to DNS
+
+=== Create Local mirror for ECS bits
+
+
+
+1.0, Feb 22, 2023
