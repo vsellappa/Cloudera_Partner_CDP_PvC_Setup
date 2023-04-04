@@ -1,5 +1,5 @@
 = CDP Private Cloud Setup on AWS Infrastructure
-Puneet Joshi <puneetjoshi@cloudera.com>; Pannag Katti <pkatti@cloudera.com>
+
 :toc:
 
 This document provides all the required information for Cloudera Partners to setup and install CDP Private Cloud on AWS Infrastructure(*EC2*). In addition to exploring the benefits of CDP Private Cloud with its rich Data Services, this setup can also be used for *ISV/IHV* certification, getting a Hands-on experience, or for any demos with potential customers. 
@@ -159,3 +159,5 @@ For all the EC2 instances to be created next, this AMI will be used.
 
 
 1.0, Feb 22, 2023
+Authors:
+Puneet Joshi <puneetjoshi@cloudera.com>; Pannag Katti <pkatti@cloudera.com>
