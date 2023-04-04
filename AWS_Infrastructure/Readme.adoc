@@ -189,12 +189,20 @@ chmod u+x cloudera-manager-installer.bin
 ----
 ==== Install *Cloudera Manager* with *Embedded Database*.
 
-* *Step 1:* Navigate to */tmp* directory and execute the bin file using below command to install.
+* *Step 1:* Navigate to */tmp* directory.
 [,shell]
 ----
 cd /tmp/
+----
+* *Step 2: * Execute the bin file using below command to install.
+[,shell]
+----
 ./cloudera-manager-installer.bin
 ----
+
+The *Cloudera Manager Read Me* page appears.
+image::images/cdp-quick-start-deployment-cm-installer.png[]
+
 
 
 ---
