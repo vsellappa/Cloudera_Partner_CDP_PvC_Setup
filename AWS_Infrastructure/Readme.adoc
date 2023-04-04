@@ -163,7 +163,36 @@ This section outlines the steps needed to set up a 4 nodes Private Cloud Base . 
 [,shell]
 ----
    cd /etc/yum.repos.d/
-----   
+----
+
+* *Step 3:* Execute below command after replacing your *Cloudera Paywall Credentials*.
+[,shell]
+----
+wget  https://<user_name>:<password>@archive.cloudera.com/p/cm7/7.9.5/redhat7/yum/cloudera-manager.repo
+----
+* *Step 4:* Navigate to */tmp/* directory
+[,shell]
+----
+cd /tmp/
+----
+
+* *Step 5:* Download the *‘cloudera-manager-installer.bin’* file by using below command after replacing your *Cloudera Paywall Credentials*
+[,shell]
+----
+wget https://<user_name>:<password>@archive.cloudera.com/p/cm7/7.9.5/cloudera-manager-installer.bin
+----
+
+* *Step 6:* Add the Executable permission to above downloaded file.
+[,shell]
+----
+chmod u+x cloudera-manager-installer.bin
+----
+
+* *Step 7:* Execute the bin file using below command to install *Cloudera Manager* with *Embedded Database*.
+[,shell]
+----
+./cloudera-manager-installer.bin
+----
 
 
 ---
