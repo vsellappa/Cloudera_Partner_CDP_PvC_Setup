@@ -157,8 +157,11 @@ For all the EC2 instances to be created next, this AMI will be used.
 === Create Local mirror for ECS bits
 
 
+---
+*Authors*
 
-1.0, Feb 22, 2023
-Authors:
-Puneet Joshi <puneetjoshi@cloudera.com>
-Pannag Katti <pkatti@cloudera.com>
+Puneet Joshi puneetjoshi@cloudera.com
+
+Pannag Katti pkatti@cloudera.com
+
+version-1.0, Feb 22, 2023
