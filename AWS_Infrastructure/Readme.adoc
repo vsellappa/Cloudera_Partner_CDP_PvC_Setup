@@ -157,8 +157,8 @@ For all the EC2 instances to be created next, this AMI will be used.
 == Private Cloud Base Setup
 This section outlines the steps needed to set up a 4 nodes Private Cloud Base . Below are the prerequisites which base cluster should have before installing/configuring Data Services.
 
-==== Step 1: Download the installer & repo file
-===== 1. Login the pvcbasemaster EC2 instance and switch to 'root' user. 
+==== Download the installer & repo file
+* *Step 1:* Login the pvcbasemaster EC2 instance and switch to 'root' user. 
 
 
 ---
