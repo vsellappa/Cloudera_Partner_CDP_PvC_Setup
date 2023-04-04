@@ -201,6 +201,7 @@ cd /tmp/
 ----
 
 The *Cloudera Manager Read Me* page appears.
+
 image::images/cdp-quick-start-deployment-cm-installer.png[]
 
 
