@@ -154,7 +154,7 @@ For all the EC2 instances to be created next, this AMI will be used.
 === Add all the machines to DNS
 
 === Create Local mirror for ECS bits
-
+== Private Cloud Base Setup
 
 ---
 *Authors*
