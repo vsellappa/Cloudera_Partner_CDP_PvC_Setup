@@ -155,6 +155,10 @@ For all the EC2 instances to be created next, this AMI will be used.
 
 === Create Local mirror for ECS bits
 == Private Cloud Base Setup
+This section outlines the steps needed to set up a 4 nodes Private Cloud Base . Below are the prerequisites which base cluster should have before installing/configuring Data Services.
+
+==== Step 1
+
 
 ---
 *Authors*
