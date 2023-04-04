@@ -157,7 +157,7 @@ For all the EC2 instances to be created next, this AMI will be used.
 == Private Cloud Base Setup
 This section outlines the steps needed to set up a 4 nodes Private Cloud Base . Below are the prerequisites which base cluster should have before installing/configuring Data Services.
 
-==== Download the installer & repo file
+==== Download the Installer & Cloudera Repository file
 * *Step 1:* Login the pvcbasemaster EC2 instance and switch to 'root' user. 
 * *Step 2:* Navigate to */etc/yum.repos.d/* directory
 [,shell]
@@ -187,10 +187,12 @@ wget https://<user_name>:<password>@archive.cloudera.com/p/cm7/7.9.5/cloudera-ma
 ----
 chmod u+x cloudera-manager-installer.bin
 ----
+==== Install *Cloudera Manager* with *Embedded Database*.
 
-* *Step 7:* Execute the bin file using below command to install *Cloudera Manager* with *Embedded Database*.
+* *Step 1:* Navigate to */tmp* directory and execute the bin file using below command to install.
 [,shell]
 ----
+cd /tmp/
 ./cloudera-manager-installer.bin
 ----
 
