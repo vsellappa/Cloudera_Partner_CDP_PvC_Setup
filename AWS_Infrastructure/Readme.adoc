@@ -159,6 +159,11 @@ This section outlines the steps needed to set up a 4 nodes Private Cloud Base . 
 
 ==== Download the installer & repo file
 * *Step 1:* Login the pvcbasemaster EC2 instance and switch to 'root' user. 
+* *Step 2:* Navigate to */etc/yum.repos.d/* directory
+[,shell]
+----
+   cd /etc/yum.repos.d/
+----   
 
 
 ---
