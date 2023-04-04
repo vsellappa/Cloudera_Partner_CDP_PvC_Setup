@@ -200,19 +200,19 @@ cd /tmp/
 ./cloudera-manager-installer.bin
 ----
 
-The *Cloudera Manager Read Me* page appears.
+*1:* The *Cloudera Manager Read Me* page appears.
 
 image::images/cdp-quick-start-deployment-cm-installer.png[]
 
 Click *Next*
 
-The *Cloudera Standard License* page appears.
+*2:* The *Cloudera Standard License* page appears.
 
 image::images/cdp-quick-start-deployment-streams-cm-installer-license.png[]
 
 Click *Next* to accept the license agreement
 
-The installer starts and does the following:
+*3:* The installer starts and does the following:
 
    * *A:* Installs Oracle JDK:
    
@@ -226,6 +226,34 @@ image::images/cdp-quick-start-deployment-streams-install-cm-server.png[]
    
 image::images/cdp-quick-start-deployment-streams-install-db.png[]
 
+[,shell]
+----
+NOTE:
+If the installation is interrupted, run the following command on the Cloudera Manager Server host before you retry the installation:
+----
+----
+sudo /usr/share/cmf/uninstall-cloudera-manager.sh
+----
+----
+The log files for the installer are stored in /var/log/cloudera-manager-installer/.
+----
+*4:* Exit the installer:
+
+   * *A:* When the installation completes, the complete URL for the Cloudera Manager Admin Console displays, including the default port number: 7180.
+    
+           Make a note of this URL or take a screen capture as you will need it for the next task.
+           
+image::images/cdp-quick-start-deployment-streams-install-cm-url.png[]
+   * *B:* Click *Ok*
+   
+          The success message appears
+   
+   * *C:* Click OK to exit the installer.
+   
+image::images/cdp-quick-start-deployment-streams-install-finish.png[]   
+   
+   
+          
 ---
 *Authors*
 
