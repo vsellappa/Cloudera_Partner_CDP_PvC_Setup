@@ -213,17 +213,18 @@ image::images/cdp-quick-start-deployment-streams-cm-installer-license.png[]
 Click *Next* to accept the license agreement
 
 The installer starts and does the following:
-    *A:* Installs Oracle JDK:
-    
-         image::images/cdp-quick-start-deployment-streams-install-jdk.png[]
+
+   * *A:* Installs Oracle JDK:
+   
+   image::images/cdp-quick-start-deployment-streams-install-jdk.png[]
          
-    *B:* Installs the Cloudera Manager Server.
-    
-         image::images/cdp-quick-start-deployment-streams-install-cm-server.png[]
+   * *B:* Installs the Cloudera Manager Server. 
+   
+   image::images/cdp-quick-start-deployment-streams-install-cm-server.png[]
          
-    *C:* Installs the embedded PostgreSQL packages and starts the database and Cloudera Manager Server.
-    
-         image::images/cdp-quick-start-deployment-streams-install-db.png[]
+   * *C:* Installs the embedded PostgreSQL packages and starts the database and Cloudera Manager Server. 
+   
+   image::images/cdp-quick-start-deployment-streams-install-db.png[]
 
 ---
 *Authors*
