@@ -160,4 +160,5 @@ For all the EC2 instances to be created next, this AMI will be used.
 
 1.0, Feb 22, 2023
 Authors:
-Puneet Joshi <puneetjoshi@cloudera.com>; Pannag Katti <pkatti@cloudera.com>
+Puneet Joshi <puneetjoshi@cloudera.com>
+Pannag Katti <pkatti@cloudera.com>
