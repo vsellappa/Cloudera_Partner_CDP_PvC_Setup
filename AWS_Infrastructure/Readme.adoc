@@ -119,13 +119,11 @@ image::images/centos_ver.png[]
     yum update -y
 ----
 
-* Generate a password protected private key by using the below command. 
+* Generate a password protected private key by using the below command and Create a password for this private key by entering it when prompted. 
 [,shell]
 ----
     ssh-keygen -t rsa  -f /root/.ssh/id_rsa_new
 ----
-
-    Create a password for this private key by entering it when prompted. 
 
 image::/AWS_Infrastructure/images/ssh-keygen-pw.png[]
 
