@@ -33,7 +33,7 @@ Administrator access to AWS account. Please verify the resource limits in the re
 
 Below table summarizes the machines used for this POC. This is a minimum requirement, One can increase the number of machines to achieve High Availability and Fault Tolerance. If this cluster is not meant to perform any benchmarking or performance test, one can proceed ahead with this infrastructure.
 
-=== Hardware
+=== Hardware [[Hardware_Table]]
 
 [frame=all, grid=all]
 |===
@@ -190,13 +190,52 @@ image::images/huge_page_ipv6.png[]
     yum install -y ipa-client wget ntpd
 ----
 
-==== Step3
-
+==== Step3 [[AMI_creation]]
+ 
 * *Create AMI:* Open AWS console and create AMI of this machine. Once the AMI is in *"Available"* state, terminate this instance. 
 
 For all the EC2 instances to be created next, this AMI will be used. 
 
 === Install and Setup of IPA services
+
+In this step a DNS server will be configured and will set up this using an IPA server. In this step we will also configure  other services like KDC, Directory Service on this IPA server. Also, please note that the hostnames used in this installation can be modified as per your requirements. 
+
+==== Step1
+
+* Create an EC2 instance using AMI created at <<AMI_creation>> . Refer to the <<Hardware_Table>> table for machine type , EBS Volume Size, and associated Security Group.
+
+* Once logged into the above created instance, install the following packages through yum using the below command.
+
+[,shell]
+----
+yum install -y ipa-server bind bind-dyndb-ldap ipa-server-dns firewalld
+----
+
+image::images/ipa_packages.png[]
+
+* Set the hostname of this EC2 instance. The hostname should be FQDN. [[hostname setting]]
+
+[,shell]
+----
+sudo hostnamectl set-hostname --static ipaserver.cdppvcds.com
+----
+
+* Take the private IP of this machine and add an entry in *_/etc/hosts_* file.
+
+[,shell]
+----
+<PRIVATE_IP_OF_MACHINE> ipaserver.cdppvcds.com
+----
+
+* *Reboot the machine and login back.*
+
+==== Step2
+
+* Verify the hostname of the IPA server with the below command. It should return the same FQDN set in the <<hostname setting>> step. 
+[,shell]
+----
+cat /etc/hostname
+----
 
 === Setup Reverse DNS Zone
 
