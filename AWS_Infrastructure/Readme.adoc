@@ -146,7 +146,9 @@ image::/AWS_Infrastructure/images/ssh-keygen-pw.png[]
     vi /etc/selinux/config
     SELINUX=disabled
 ----
+
 image::AWS_Infrastructure/images/selinux.png[]
+
 
 * *Set swappiness to 1:* Open the file */etc/sysctl.conf* for editing and add the below line.
 [,shell]
