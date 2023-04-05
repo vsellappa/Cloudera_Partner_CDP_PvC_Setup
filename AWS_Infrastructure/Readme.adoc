@@ -264,19 +264,37 @@ ipa-server-install --setup-dns
 
 Please keep the same password for both Directory manager and IPA admin so that there is no confusion in future while using the same. Also, note down the password separately. 
 
-The setup will take 10-15 Minutes. If everything goes fine then you should get an output similar to the below screenshot.
+*The setup will take 10-15 Minutes. If everything goes fine then you should get an output similar to the below screenshot.*
 
 image::images/ipa_server_setup.png[]
+
+* _If the installation fails, then run the below command to uninstall and retry with the above command for installation._
+[,shell]
+----
+ipa-server-install --uninstall
+----
+
+* Update firewall rule to allow ports using  below command.
+[,shell]
+----
+firewall-cmd --permanent --add-port={80/tcp,443/tcp,389/tcp,636/tcp,88/tcp,464/tcp,53/tcp,88/udp,464/udp,53/udp,123/udp,749/tcp,749/udp}
+----
+
+* Verify the setup by generating a ticket for the admin user. Execute *kinit admin* and provide the directory password given during ipa server installation. The command should generate the ticket and should be listed by executing *klist -e*. This command should return the below output.
+
+image:images/klist_verify.png[]
 
 === Setup Reverse DNS Zone
 
 === Add all the machines to DNS
 
 === Create Local mirror for ECS bits
+
+
 == Private Cloud Base Setup
 This section outlines the steps needed to set up a 4 nodes Private Cloud Base . Below are the prerequisites which base cluster should have before installing/configuring Data Services.
 
-==== Download the Installer & Cloudera Repository file
+=== Download the Installer & Cloudera Repository file
 * *Step 1:* Login the pvcbasemaster EC2 instance and switch to 'root' user. 
 * *Step 2:* Navigate to */etc/yum.repos.d/* directory
 [,shell]
@@ -306,7 +324,7 @@ wget https://<user_name>:<password>@archive.cloudera.com/p/cm7/7.9.5/cloudera-ma
 ----
 chmod u+x cloudera-manager-installer.bin
 ----
-==== Install *Cloudera Manager* with *Embedded Database*.
+=== Install *Cloudera Manager* with *Embedded Database*.
 
 * *Step 1:* Navigate to */tmp* directory.
 [,shell]
