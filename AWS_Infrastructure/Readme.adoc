@@ -213,7 +213,7 @@ yum install -y ipa-server bind bind-dyndb-ldap ipa-server-dns firewalld
 
 image::images/ipa_packages.png[]
 
-* Set the hostname of this EC2 instance. The hostname should be FQDN. [[hostname setting]]
+* Set the hostname of this EC2 instance. The hostname should be FQDN. 
 
 [,shell]
 ----
@@ -231,11 +231,42 @@ sudo hostnamectl set-hostname --static ipaserver.cdppvcds.com
 
 ==== Step2
 
-* Verify the hostname of the IPA server with the below command. It should return the same FQDN set in the <<hostname setting>> step. 
+* Verify the hostname of the IPA server with the below command. It should return the same FQDN set in the previous step. 
+
 [,shell]
 ----
 cat /etc/hostname
 ----
+
+* Configure the IPA server by running below command as a root user. 
+[,shell]
+----
+ipa-server-install --setup-dns
+----
+
+* Follow the on screen instructions and provide the inputs for the parameters as per the table below.
+
+[frame=all, grid=all]
+|===
+|Parameter                              |Value 
+
+|Server host name [ipaserver.cdppvcds.com]                |*ipaserver.cdppvcds.com*
+|Please confirm the domain name [cdppvcds.com]            |*cdppvcds.com*
+|Please provide a realm name [CDPPVCDS.COM]               |*CDPPVCDS.COM*
+|Directory Manager password                               |<Password For Directory Manager>
+|Password (confirm)                                       |<Confirm Password>
+|IPA admin password                                       |<Password For IPA Admin>
+|Password (confirm)                                       |<Confirm Password>
+|Do you want to configure DNS forwarders? [yes]           |no
+|Do you want to search for missing reverse zones? [yes]   |no
+|Continue to configure the system with these values? [no] |yes
+|===
+
+Please keep the same password for both Directory manager and IPA admin so that there is no confusion in future while using the same. Also, note down the password separately. 
+
+The setup will take 10-15 Minutes. If everything goes fine then you should get an output similar to the below screenshot.
+
+image::images/ipa_server_setup.png[]
 
 === Setup Reverse DNS Zone
 
