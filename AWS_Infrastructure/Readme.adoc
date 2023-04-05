@@ -125,7 +125,7 @@ image::images/centos_ver.png[]
     ssh-keygen -t rsa  -f /root/.ssh/id_rsa_new
 ----
 
-image::/AWS_Infrastructure/images/ssh-keygen-pw.png[]
+image::images/ssh-keygen-pw.png[]
 
 * Add the newly created key into authorized_keys by using below command. 
 [,shell]
