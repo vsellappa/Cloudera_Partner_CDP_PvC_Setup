@@ -37,17 +37,15 @@ Below table summarizes the machines used for this POC. This is a minimum require
 
 [frame=all, grid=all]
 |===
-|AWS Resource | Attribute | Count | CDP Role | Storage
+|AWS Resource | Machine Size | Count | CDP Role | Storage
 
-|EC2|sample|sample|FreeIPA server|sample
+|EC2|m5.4xlarge|1|FreeIPA server|50 GB EBS Root volume
 
-|EC2|sample|sample|CDP Base master|sample
+|EC2|m5.8xlarge|4|CDP Base Cluster|200 GB EBS Root volume
 
-|EC2|sample|sample|CDP Base worker|sample
+|EC2|m5.4xlarge|6|CDP ECS Cluster|150 GB Root Volume and  2 TB For ECS
 
-|EC2|sample|sample|ECS cluster|sample
-
-|Elastic IP|Cell in column 2, row 2|Cell in column 3, row 2|Static IP for all CDP UIs|Cell in column 5, row 2
+|Elastic IP|NA|2|For Data Services & Cloudera Manager|NA
 |===
 
 === Software
@@ -59,17 +57,34 @@ Below table summarizes the list of softwares/packages and their use for setting 
 |===
 |Software | Version | Node | Role | Availability 
 
-|EC2|sample|sample|FreeIPA server|sample
-
-|EC2|sample|sample|CDP Base master|sample
+|Centos              |7.9         |All Machines           |Operating System      |AMI
+|IPA Server          |Latest      |IPA Machine            |For Setting up KDC,DNS|Yum Package
+|IPA Client          |Latest      |All Machines           |IPA/DNS Communication |Yum Package
+|NFS Utility Package |Latest      |All Machine            |NFS Communication     |Yum package
+|Cloudera Manager    |7.9.5       |CDP Base               |Management            |Cloudera Repo
+|Cloudera Runtime    |7.1.8       |CDP Base and ECS Nodes |Runtime               |Cloudera Repo          
+|Cloudera ECS        |1.5.0       |ECS Cluster Nodes      |Data Services         |Cloudera Repo
+|OpenJDK             |1.8         |All Machines           |All CDP Hosts         |Cloudera Repo
 |===
 
 
 === Summary
+The below table contains the names assigned to the EC2 instances and to some other required components. Going forward in this document will refer to them by name.
+
+
+*Note:* The hostnames mentioned here are just for convenience. You may choose to have the hostnames as per your requirements. 
 
 [frame=all, grid=all]
 |===
-|Software | Version | Node | Role | Availability 
+|Name                              |Description 
+
+|pvcbasemaster                     |One Node CDP Private Cloud Base Master
+|pvcbaseworker1 to pvcbaseworker3  |CDP Base Cluster Worker Nodes
+|pvcipaserver                      |FreeIPA Server
+|pvcecsmaster                      |ECS Master Node
+|pvcecs1 to pvcecs6                |ECS Worker Nodes
+|PVCSG                             |Common Security Group For All EC2.
+|PVCBASE.COM                       |Dummy Domain For POC Purpose
 |===
 
 Once you have familiarized yourself with all the information mentioned above, you can start with the preliminary work for CDP Base setup. 
