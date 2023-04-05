@@ -127,7 +127,7 @@ image::images/centos_ver.png[]
 
 Create a password for this private key by entering it when prompted. 
 
-image::/AWS_Infrastructure/images/centos_ver.png[]
+image::/AWS_Infrastructure/images/ssh-keygen-pw.png[]
 
 
 
