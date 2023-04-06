@@ -725,6 +725,13 @@ image::images/ECS/ecs_setup.png[]
 
 image::images/ECS/ecs_summary.png[]
 
+== Enable and Configure *CDP Data Services*
+
+=== Cloudera Data Engineering (*CDE*)
+
+=== Cloudera Data Warehouse (*CDW*)
+
+=== Cloudera Machine Learning (*CML*)
 
 ---
 *Authors*
