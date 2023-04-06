@@ -420,8 +420,8 @@ image::images/ipa_client_install.png[]
 * Once the ipa-client configuration is successful we need to create a record in the Reverse DNS zone as well for each machine. Use the below command as reference and make changes as per your configuration/machine’s private IP and Hostname. 
 [,shell]
 ----
-Private IP of the EC2 instance: *172.31.0.234*
-Hostname of the EC2 instance:   *cdpbase.cdppvcds.com*
+Private IP of the EC2 instance: 172.31.0.234
+Hostname of the EC2 instance:   cdpbase.cdppvcds.com
 ----
 
 Generate the command as shown below and run the same on all the FreeIPA agents, that includes all the nodes of Base and ECS cluster. 
