@@ -626,7 +626,7 @@ image::images/cdp-quick-start-deployment-streams-install-finish.png[]
    
 == Private Cloud Data Services Setup
 
-=== Step1: Prepare ECS Nodes
+=== Prepare ECS Nodes
 
 * Start the EC2 instances designated for the ECS cluster created in the step <<Cluster_Hosts>> in the <<Preliminary_Work>> section. Refer to the <<Hardware_Table>> table for machine type , EBS Volume Size, and associated Security Group. 
 
@@ -636,7 +636,7 @@ image::images/lsblk_ecs.png[]
 
 * Allocate an Elastic IP on AWS and associate it with the ECS Master EC2 instance. 
 
-=== Step2: Install ECS
+=== Install ECS
 
 * In Cloudera Manager, click Data Services in the left menu. 
 
