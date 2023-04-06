@@ -462,7 +462,7 @@ Sample output shown below.
 
 image::images/dig_x_agent.png[]
 
-=== Create Local mirror for ECS bits
+=== Create Local mirror for ECS bits [[Create_Local_Mirror]]
 
 This is an optional step however if performed, it can save a good amount of time during the ECS installation. The total size of ECS bits/images is nearly *85G* and the installer will take time to download these during the actual installation. 
 
@@ -630,11 +630,102 @@ image::images/cdp-quick-start-deployment-streams-install-finish.png[]
 
 * Start the EC2 instances designated for the ECS cluster created in the step <<Cluster_Hosts>> in the <<Preliminary_Work>> section. Refer to the <<Hardware_Table>> table for machine type , EBS Volume Size, and associated Security Group. 
 
-* On each of the ECS hosts, create three partitions of attached EBS volume (non-root) and mount those as below. 
+* On each of the ECS hosts, create three partitions of the attached 2T EBS volume (non-root) and mount those partitions as below. 
 
-image::/AWS_Infrastructure/images/lsblk_ecs.png[]
+image::images/lsblk_ecs.png[]
 
-          
+* Allocate an Elastic IP on AWS and associate it with the ECS Master EC2 instance. 
+
+=== Step2: Install ECS
+
+* In Cloudera Manager, click Data Services in the left menu. 
+
+image::images/ECS/CM_data_svcs.png[]
+
+* The *Add Private Cloud Containerized Cluster* page appears. Click Continue. 
+
+image::images/ECS/add_priv_containerized.png[]
+
+_Alternatively, you can also click Add > Add Cluster at the top right in Cloudera Manager, then select Private Cloud Containerized Cluster as the cluster type._
+
+image::images/ECS/add_cluster.png[]
+
+image::images/ECS/sel_clust_type_alt.png[]
+
+* On the *Getting Started* page of the installation wizard, select *Air Gapped* as the Install Method and select your local repo URL in Custom Repository Section. This local repo is from the step <<Create_Local_Mirror>> where httpd is installed on an EC2 instance to download the ECS images. 
+
+image::images/ECS/air_gapped.png[]
+
+* Once you see the correct version at the bottom of the page as shown in the above screenshot, Click *Continue*. 
+
+* In the *Cluster Basics* page, type a name for the Private Cloud cluster that you want to create in the Cluster Name field. From the Base Cluster drop-down list, select the cluster that has the storage and SDX services that you want this new Private Cloud Data Services instance to connect with. Click Continue.
+
+image::images/ECS/base_for_ECS.png[]
+
+* In the *Specify Hosts* page, provide a list of available ECS hosts. 
+
+image::images/ECS/add_ecs_hosts.png[]
+
+* In the *Select JDK* page, select *Install a Cloudera-provided version of OpenJDK* .
+
+image::images/ECS/openjdk.png[]
+
+* On the *Enter Login Credentials* page, select the SSH Username and provide the private key generated in <<Preliminary_Work>> section in Step1. Also, enter the passphrase entered while generating the key-pair. 
+
+image::images/ECS/enter_login_creds.png[]
+
+* The Install Agents page appears with the progress bar showing the components getting installed like openjdk. Once it is complete, click *Continue*. 
+
+image::images/ECS/install_agent.png[]
+
+* Next on the *Assign Roles* page, ensure that the roles assignment for your new Private Cloud Containerized cluster is as follows. 
+
+[frame=all, grid=all]
+|===
+|Role|ECS Host
+
+|Docker Server |All ECS Hosts (i.e., ECS master and worker nodes)
+|ECS Server     |ECS Master only
+|ECS Agent      |ECS Workers only
+
+|===
+
+image::images/ECS/assign_ECS_roles.png[]
+
+* On the *Configure a Docker Repository* page, select *Use an embedded Docker repository* option. 
+
+image::images/ECS/embedded_docker.png[]
+
+* After choosing the embedded docker option, select *default*. 
+
+image::images/ECS/default_docker.png[]
+
+* On the *Configure Data Services* page, modify the storage related parameters as shown below. 
+
+image::images/ECS/ecs_volume_config.png[]
+
+* On the *Configure Databases page*, select *Create embedded databases* with default values. Click *Continue*.
+
+image::images/ECS/configure_ecs_db.png[]
+
+* On the *Install Parcels* page, the selected parcels are downloaded and installed on the host cluster. Click *Continue*.
+
+image::images/ECS/install_parcels.png[]
+
+* On the *Inspect Cluster* page, you can inspect your network performance and hosts. If the inspect tool displays any issues, you can fix those issues and run the inspect tool again. Click *Continue*.
+
+image::images/ECS/inspect_cluster.png[]
+
+* The installation progress is displayed on the *Install Data Services* page. This step will take nearly an hour to complete.
+
+image::images/ECS/ecs_setup.png[]
+
+
+* When the installation is complete, you will see the *Summary* image. You can now launch CDP Private Cloud. 
+
+image::images/ECS/ecs_summary.png[]
+
+
 ---
 *Authors*
 
