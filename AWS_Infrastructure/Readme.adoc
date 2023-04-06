@@ -307,7 +307,7 @@ Make sure the above is added above any other nameserver entry. The contents of t
 
 image::images/resolv_conf.png[]
 
-* The above changes are temporary and would get overwritten if the machine is rebooted. In order to keep the nameserver entry persistent, open the file */etc/sysconfig/network* in edit modeand add below entries. 
+* The above changes are temporary and would get overwritten if the machine is rebooted. In order to keep the nameserver entry persistent, open the file */etc/sysconfig/network* in edit mode and add below entries. 
 [,shell]
 ----
     NETWORKING=yes
@@ -417,7 +417,49 @@ image::images/ipa_client_install.png[]
     kinit admin
 ----
 
-* Once the ipa-client configuration is successful we need to create a record in the Reverse DNS zone as well for each machine. Use the below command as reference and make changes as per your configuration/machine’s private IP and Hostname.
+* Once the ipa-client configuration is successful we need to create a record in the Reverse DNS zone as well for each machine. Use the below command as reference and make changes as per your configuration/machine’s private IP and Hostname. 
+
+Private IP of the EC2 instance: *172.31.0.234*
+
+Hostname of the EC2 instance:   *cdpbase.cdppvcds.com*
+
+Generate the command as shown below and run the same on all the FreeIPA agents, that includes all the nodes of Base and ECS cluster. 
+
+[,shell]
+----
+ipa dnsrecord-add <2nd>.<1st>.in-addr.arpa. <4th>.<3rd> --ptr-rec <IPA_Client FQDN>.
+
+ipa dnsrecord-add 31.172.in-addr.arpa. 234.0 --ptr-rec cdpbase.cdppvcds.com.
+----
+
+image::images/ipa_dns_record_ipa_agent.png[]
+
+* The record for the machine should be created in the Reverse DNS zone. 
+
+* Verify the Forward and Reverse Lookup from each machine as mentioned previously. 
+
+** Verify the Forward lookup by running the below command. This command should return the IPV4 of the machine in the *Answer* Section. 
+
+[,shell]
+----
+     dig <FQDN of the IPAAGENT> A
+Ex:- dig cdpbase.cdppvcds.com A
+----
+
+Sample output shown below. 
+
+image::images/dig_A_agent.png[]
+
+** Verify the Reverse lookup by running the below command. This command should return the hostname of the machine in the *Answer* Section. 
+[,shell]
+----
+     dig -x <Private_IP_of_IPAAGENT>
+     dig -x 172.31.0.234
+----
+
+Sample output shown below. 
+
+image::images/dig_x_agent.png[]
 
 === Create Local mirror for ECS bits
 
