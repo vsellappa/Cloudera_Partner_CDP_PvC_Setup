@@ -196,7 +196,7 @@ image::images/huge_page_ipv6.png[]
 
 For all the EC2 instances to be created next, this AMI will be used. 
 
-=== Install and Setup of IPA services
+=== Install and Setup of IPA services [[DNS_server_setup]]
 
 In this step a DNS server will be configured and will set up this using an IPA server. In this step we will also configure  other services like KDC, Directory Service on this IPA server. Also, please note that the hostnames used in this installation can be modified as per your requirements. 
 
@@ -286,7 +286,138 @@ image:images/klist_verify.png[]
 
 === Setup Reverse DNS Zone
 
-=== Add all the machines to DNS
+In this step we will be setting up a reverse DNS zone on the FreeIPA server for reverse lookup and we will also update the network configuration files on the IPA server to use the Name Server created in <<DNS_server_setup>> . 
+
+==== Step1
+
+* Login to IPA Server as root and get the private IP of the server with the below command.  
+
+[,shell]
+----
+    hostname -i
+----
+
+* Open the file */etc/resolv.conf* in edit mode and add the following. 
+[,shell]
+----
+    nameserver <PRIVATE_IP_OF_IPASERVER>
+----
+
+Make sure the above is added above any other nameserver entry. The contents of the file must look similar to the below. 
+
+image::images/resolv_conf.png[]
+
+* The above changes are temporary and would get overwritten if the machine is rebooted. In order to keep the nameserver entry persistent, open the file */etc/sysconfig/network* in edit modeand add below entries. 
+[,shell]
+----
+    NETWORKING=yes
+    NISDOMAIN=<domain>
+    DNS1=<Private_IP_Of_IPA_Server>
+    NOZEROCONF=yes
+----
+
+The file content must look similar to the below. 
+
+image:/AWS_Infrastructure/images/sysconfig_network.png[]
+
+* Reboot the machine and verify the contents of */etc/resolv.conf* are unchanged and ensure that there is an entry of our nameserver. 
+
+* Run the below command to authenticate as admin through kadmin and enter the directory password. 
+[,shell]
+----
+    kinit admin
+----
+
+* Take the CIDR block of the VPC in which the EC2 instances are created and create a reverse DNS zone by executing the below command on the IPA Server machine. 
+[,shell]
+----
+    ipa dnszone-add --name-from-ip=<YOUR_VPC_CIDR>
+----
+* If your VPC has a CIDR *172.31.0.0/16*, then the command looks as below. 
+----
+    ipa dnszone-add --name-from-ip=172.31.0.0/16
+----
+
+* Once you execute the above command, accept the default value by hitting the enter key. It will create a reverse DNS zone by name 31.172.in-addr.arpa. (with a trailing dot)
+
+image::images/ipa_dns_zone_add.png[]
+
+* Add the entry of this IPA server machine to the reverse DNS zone . We need to add the IPV4 address in reverse order. The first two octets are already added in the reverse zone above. Now we need to create a record for this machine inside that zone . In the command below you need to add the record by providing the last two octets of your machine's private IPV4 in reverse order. Include the trailing dot after the machine name.
+[,shell]
+----
+    ipa dnsrecord-add <2nd>.<1st>.in-addr.arpa. <4th>.<3rd> --ptr-rec <ipaserver FQDN>.
+    ipa dnsrecord-add 31.172.in-addr.arpa. 119.40 --ptr-rec ipaserver.cdppvcds.com.
+----
+
+*Please note that there is a trailing dot after the IPASERVER FQDN in the above command.*
+
+image::images/ipa_dnsrecord_add.png[]
+
+* The above command should succeed. In order to validate it, we need to verify the forward and reverse lookup on this machine. 
+
+** Verify the Forward lookup by running the below command. This command should return the IPV4 of the machine in the *Answer* Section. 
+
+[,shell]
+----
+     dig <FQDN of the IPASERVER> A
+Ex:- dig ipaserver.cdppvcds.com A  
+----
+
+Sample output shown below. 
+
+image::images/dig_A.png[]
+
+** Verify the Reverse lookup by running the below command. This command should return the hostname of the machine in the *Answer* Section. 
+[,shell]
+----
+     dig -x <Private_IP_of_IPASERVER>
+     dig -x 172.31.40.119
+----
+
+Sample output shown below. 
+
+image::images/dig_x.png[]
+
+=== Add all the machines to the DNS server
+
+The tasks in this step need to be performed on all Machines except the IPA Server machine. 
+
+* Provision the EC2 instances for both Base and ECS clusters. Refer to the <<Hardware_Table>> table for machine specification, EBS Volume, and Security Group details. 
+
+* Set the static hostname on each machine by using the command below. 
+[,shell]
+----
+    sudo hostnamectl set-hostname --static <Hostname_with_Your_Domain>
+----
+
+* Either copy the */etc/resolv.conf* and */etc/sysconfig/network* file from the IPA server machine to all the machines or update manually on each machine to have the same configuration on all the hosts. 
+
+* On each machine run the below command to set up the IPA client. 
+[,shell]
+----
+    ipa-client-install --force-ntpd
+----
+
+* Enter the values for these parameters as below. After entering these values, it should return the message as "The ipa-client-install command was successful". 
+[frame=all, grid=all]
+|===
+|Parameter                                                     |Value 
+
+|Continue to configure the system with these values? [no]: yes |yes
+|User authorized to enroll computers:                          |admin
+|Password for admin@<Your_Domain>                              |<Password created earlier>
+
+|===
+
+image::images/ipa_client_install.png[]
+
+* Generate the kerberos ticket for admin by running the below command. 
+[,shell]
+----
+    kinit admin
+----
+
+* Once the ipa-client configuration is successful we need to create a record in the Reverse DNS zone as well for each machine. Use the below command as reference and make changes as per your configuration/machine’s private IP and Hostname.
 
 === Create Local mirror for ECS bits
 
