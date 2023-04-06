@@ -89,7 +89,7 @@ The below table contains the names assigned to the EC2 instances and to some oth
 
 Once you have familiarized yourself with all the information mentioned above, you can start with the preliminary work for CDP Base setup. 
 
-== Preliminary Work
+== Preliminary Work [[Preliminary_Work]]
 
 Before getting into the actual installation of CDP Private Cloud Base & Data Services we need to prepare our machines and perform some steps to meet the prerequisites. 
 
@@ -378,7 +378,7 @@ Sample output shown below.
 
 image::images/dig_x.png[]
 
-=== Add all the machines to the DNS server
+=== Add all the machines to the DNS server [[Cluster_Hosts]]
 
 The tasks in this step need to be performed on all Machines except the IPA Server machine. 
 
@@ -626,6 +626,13 @@ image::images/cdp-quick-start-deployment-streams-install-finish.png[]
    
 == Private Cloud Data Services Setup
 
+=== Step1: Prepare ECS Nodes
+
+* Start the EC2 instances designated for the ECS cluster created in the step <<Cluster_Hosts>> in the <<Preliminary_Work>> section. Refer to the <<Hardware_Table>> table for machine type , EBS Volume Size, and associated Security Group. 
+
+* On each of the ECS hosts, create three partitions of attached EBS volume (non-root) and mount those as below. 
+
+image::/AWS_Infrastructure/images/lsblk_ecs.png[]
 
           
 ---
