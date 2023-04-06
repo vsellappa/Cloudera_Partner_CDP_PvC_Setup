@@ -464,6 +464,67 @@ image::images/dig_x_agent.png[]
 
 === Create Local mirror for ECS bits
 
+This is an optional step however if performed, it can save a good amount of time during the ECS installation. The total size of ECS bits/images is nearly *85G* and the installer will take time to download these during the actual installation. 
+
+* Identify any machine from the EC2 instances created before and install httpd by using the below command.  
+[,shell]
+----
+    yum install -y httpd
+----
+
+* Start the httpd service and enable it to run even after reboot with the commands below. 
+[,shell]
+----
+    systemctl start httpd
+    systemctl enable httpd
+----
+
+* Create a directory to save the ECS images. 
+[,shell]
+----
+    mkdir -p /var/www/html/cdp-pvc-ds
+----
+
+* Navigate to the above created directory and create a new shell script file with the below content. 
+[,shell]
+----
+    vi download_ecs.sh
+----
+
+* Copy the below script in the newly created file *download_ecs.sh*. 
+
+[,shell]
+----
+echo "Starting the ECS bits download"
+
+wget -l 0 --recursive r-no-parent -e robots=off -nH --cut-dirs=2 --reject="index.html*" -t 10 https://<CDP_LICENSE_USERNAME>:<CDP_LICENSE_PASSWORD>@archive.cloudera.com/p/cdp-pvc-ds/latest/ -P /var/www/html/cdp-pvc-ds/latest
+
+RETURN_VAL=$?
+
+echo "--------------------------------------------------------"
+
+if [[ "${RETURN_VAL}" == 0 ]]; then
+    echo "Successfully downloaded."
+else
+    echo "Download not successful."
+fi
+----
+
+* Run this script in nohup to keep the job running in background. 
+[,shell]
+----
+    nohup sh download_ecs.sh > download_ecs.log &
+----
+
+* This will take nearly 5-6 hours based on the network speed. Keep checking the logs of download_ecs.log and if you see the *Successfully downloaded* message, then it means all the images got downloaded successfully. To check the logs, you can use any of the below commands.  
+,shell]
+----
+    tail -f download_ecs.log
+    cat download_ecs.log
+----
+
+* Once the images got successfully downloaded, please proceed to the CDP Private Cloud Base setup.
+
 
 == Private Cloud Base Setup
 This section outlines the steps needed to set up a 4 nodes Private Cloud Base . Below are the prerequisites which base cluster should have before installing/configuring Data Services.
