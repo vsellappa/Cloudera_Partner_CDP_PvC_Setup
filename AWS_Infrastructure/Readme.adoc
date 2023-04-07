@@ -725,6 +725,8 @@ image::images/ECS/ecs_setup.png[]
 
 image::images/ECS/ecs_summary.png[]
 
+---
+
 == Accessing CDP Private Cloud [[CDP_Console]]
 
 * From Cloudera Manager screen, click on *Data Services(New)* in the left pane. 
