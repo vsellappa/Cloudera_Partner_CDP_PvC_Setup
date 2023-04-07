@@ -725,13 +725,106 @@ image::images/ECS/ecs_setup.png[]
 
 image::images/ECS/ecs_summary.png[]
 
+== Accessing CDP Private Cloud [[CDP_Console]]
+
+* From Cloudera Manager screen, click on *Data Services(New)* in the left pane. 
+
+image::images/CDE/data_svcs.png[]
+
+* On the *CDP Private Cloud Containerized services* page, click on Open CDP Private Cloud Data Services button. This will open CDP PvC authentication page. 
+
+image::images/CDE/open_data_svs.png[]
+
+* If you have LDAP account credentials, then enter its username and password and then click on *Login*. Else, you can click on *Login as Local Administrator*, and enter the default credentials. (admin/admin)
+
+image::images/CDE/data_svcs_auth.png[]
+
+* After authenticating successfully, you will land at the CDP console page. 
+
+image::images/CDE/cdp_console.png[]
+
+* From this page, you can navigate to different data services and the management services. 
+
+== Cloudera Data Engineering (*CDE*)
+
+=== CDP Base cluster requirements
+
+The Cloudera Data Engineering (*CDE*) service requires proper configuration of Ozone service in the Base cluster. Ensure that Ozone is running properly otherwise you will end up with issues while enabling CDE. 
+
+=== Enabling CDE Service
+
+* From the CDP console page, click on *Data Engineering*. 
+
+image::images/CDE/open_cde.png[]
+
+* This will open CDE home page. Since this will be the first time you would be opening CDE, you will not see any virtual clusters. Click on *Administration* in the left pane. 
+
+image::images/CDE/cde_home.png[]
+
+* Click on *+* icon as shown below which will allow you to enable CDE service post which you can create *Virtual Clusters*. 
+
+image::images/CDE/enable_cde.png[]
+
+* On the *Enable a Service* page, enter the values as shown below and then click on *Enable*. 
+
+image::images/CDE/enable_cde_config.png[]
+
+Please note that the cpu and memory config chosen here are minimum values. You can choose to increase it. 
+
+* This will take approximately 30 mins after which you will be able to see a CDE service on the CDE home page. 
+
+image::images/CDE/running_cde_svc.png[]
+(_default cde is the name given as an example. You will see as per the value you entered in the previous step_.)
+
+* The *CDE Home* page displays the status of the CDE service initialization. You can view logs for the service by clicking on the service vertical ellipsis (three dots) menu, and then clicking *View Logs*.
+
+
+If you are unable to see the service, then the chances are that the default virtual cluster would not have created properly. In this case, click on *View Services* button and then you will be able to see the CDE service enabled. 
+
+image::images/CDE/cde_svc.png[]
+
+=== Create Virtual Cluster
+
+When you enable CDE service, by default a new Virtual cluster with *Spark2.4* will be created. If you have not enabled this option earlier, then you need to create a virtual cluster again. 
+
+* On the CDE Home page, click on the *+* icon next to *Virtual clusters* as shown below. 
+
+image::images/CDE/crt_vc.png[]
+
+* On the *Create a Virtual Cluster* page, enter the below values and click on *Create*. 
+** *Cluster Name*: Cluster Name should adhere to the below conditions. 
+*** Begin with a letter
+*** Be between 3 and 30 characters (inclusive)
+*** Contain only alphanumeric characters and hyphens
+
+** *Service*: Select the CDE service created earlier. 
+
+** *Spark Version*: Select the Spark version as per your requirement. If you need both *Spark2.4* and *Spark3.7*, you can create two virtual clusters provided you have sufficient resources. 
+
+image::images/CDE/crt_vc_choose_spark.png[]
+This will take approximately 20 minutes.
+
+* You can check the logs of the cluster creation by clicking on the *pencil* icon and selecting the *Logs* section on the cluster page as shown below. 
+
+image::images/CDE/vc_clust_details.png[]
+
+image::images/CDE/vc_clust_logs.png[]
+
+=== Configuring Virtual Cluster
+
+
+=== Configuring Users on CDE
+
+
+
+
+
+
+== Cloudera Data Warehouse (*CDW*)
+
+== Cloudera Machine Learning (*CML*)
+
 == Enable and Configure *CDP Data Services*
-
-=== Cloudera Data Engineering (*CDE*)
-
-=== Cloudera Data Warehouse (*CDW*)
-
-=== Cloudera Machine Learning (*CML*)
 
 ---
 *Authors*
