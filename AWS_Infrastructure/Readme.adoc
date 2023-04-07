@@ -740,7 +740,7 @@ image::images/CDE/open_data_svs.png[]
 
 image::images/CDE/data_svcs_auth.png[]
 
-* After authenticating successfully, you will land at the CDP console page. 
+* After authenticating successfully, you will land at the CDP console/Data Services page. 
 
 image::images/CDE/cdp_console.png[]
 
@@ -939,9 +939,40 @@ For the above example, the command would like below.
 
 == Cloudera Data Warehouse (*CDW*)
 
+* Open CDP Data Services page. Refer to the steps <<CDP_Console>> for more details. 
+
+* Click on Data Warehouse. 
+
+image::images/CDW/select_CDW.png[]
+
+* On the overview page, click on the *Activate* icon as shown below. 
+
+image::images/CDW/activate_cdw.png[]
+
+* On the *Activate Envionrment* page, enter the LDAP username and password. *Enable Low resource mode* and click on *Activate*. 
+
+image::images/CDW/low_res_mode.png[]
+
+* Once the environment is activated, click on *+* icon next to Virtual Warehouses. A *New Virtual Warehouse* tab appears on the same page. 
+
+** Enter the name for the new virtual warehouse(*VW*). 
+
+** Choose the type of VW, Hive or Impala. 
+
+** Choose the default Database catalog that appears in the dropdown. 
+
+** Choose Size as *xsmall-2 Executors*. 
+
+** AutoSuspend: If you want the VW to keep running all the time, you can *Disable* it. 
+
+** Keep the remaining parameters default and click on *Create*. 
+
+image::images/CDW/crt_wh.png[]
 
 
 == Cloudera Machine Learning (*CML*)
+
+
 
 
 
