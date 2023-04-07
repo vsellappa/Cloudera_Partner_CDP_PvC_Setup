@@ -811,7 +811,34 @@ image::images/CDE/vc_clust_details.png[]
 
 image::images/CDE/vc_clust_logs.png[]
 
-=== Configuring Virtual Cluster
+=== Initializing Virtual Cluster
+
+Every time a new virtual cluster is created, there are a few manual steps that must be performed. 
+
+* Log in to the ECS master and run the next set of commands as per the instructions. 
+
+* Run the below command to create a temporary directory and navigate to the same. 
+[,shell]
+----
+    mkdir -p /tmp/cde-latest && cd /tmp/cde-latest
+----
+
+* Download the script https://docs.cloudera.com/data-engineering/1.5.0/cdp-cde-utils.sh[cdp-cde-utils] using wget. 
+[,shell]
+----
+    wget https://docs.cloudera.com/data-engineering/1.5.0/cdp-cde-utils.sh
+----
+
+* Add execute permission to this script. 
+
+[,shell]
+----
+chmod +x /path/to/cdp-cde-utils.sh
+----
+
+* Identify the virtual cluster endpoint:
+
+** 
 
 
 === Configuring Users on CDE
