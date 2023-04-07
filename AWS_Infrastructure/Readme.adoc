@@ -939,6 +939,8 @@ For the above example, the command would like below.
 
 == Cloudera Data Warehouse (*CDW*)
 
+=== Enable CDW environment and creation of Database Catalog
+
 * Open CDP Data Services page. Refer to the steps <<CDP_Console>> for more details. 
 
 * Click on Data Warehouse. 
@@ -952,6 +954,8 @@ image::images/CDW/activate_cdw.png[]
 * On the *Activate Envionrment* page, enter the LDAP username and password. *Enable Low resource mode* and click on *Activate*. 
 
 image::images/CDW/low_res_mode.png[]
+
+=== Create Virtual Warehouse
 
 * Once the environment is activated, click on *+* icon next to Virtual Warehouses. A *New Virtual Warehouse* tab appears on the same page. 
 
@@ -969,8 +973,113 @@ image::images/CDW/low_res_mode.png[]
 
 image::images/CDW/crt_wh.png[]
 
+* A new Virtual Warehouse will be created. You can use *Hue* to submit queries to the underlying engine of the Virtual Warehouse. 
+
+image::images/CDW/vw_hue.png[]
 
 == Cloudera Machine Learning (*CML*)
+
+=== ML Workspace Creation
+
+* From the CDP Data Services page, click on *Machine Learning*. 
+
+image::images/CML/cdp_CML.png[]
+
+* Since this will be the first time you opening *CML*, there will be no *ML workspace*. You will see the screen as below. 
+
+image::images/CML/ml_workspc_empty.png[]
+
+* Click on *Provision Workspace* on the same page. 
+
+image::images/CML/prov_ml_workspc.png[]
+
+* Enter the configuration values for the workspace as described below. 
+
+** *Workspace name*: A suitable name for the workspace. 
+
+** *Environment*: Select the default environment from the drop down. 
+
+** *Namespace*: This will be the kubernetes namespace under which the pods would be spinned up. By default, it is set to *cml*. You can change it if you wish to. 
+
+** *NFS server*: Select *Internal*.
+
+* Under *Production Learning*, the below parameters need to be updated. 
+
+** *Enable Governance*: This provided advanced lineage and governance features. For simple demos or POCs, you may choose to disable it. 
+
+** *Enable Model Metrics*: Keep it enabled. It provides you with the metrics. 
+
+** *Enable TLS*: You can keep it disabled. 
+
+** *Enable Monitoring*: This helps in monitoring the resource usage for the provisioned workspace. Enable it. 
+
+** *CML Static Subdomain*: Enter any short name for this parameter that helps in monitoring the resource usage for the provisioned workspace. 
+
+image::images/CML/workspc_config_2.png[]
+
+* Once it is created, it appears on the CML *Workspaces* page as shown below. 
+
+image::images/CML/created_wrkspc.png[]
+
+=== Create Project
+
+* Click on the newly created workspace. It will open the *Projects* screen of CML. 
+
+image::images/CML/click_on_workspc.png[]
+
+* At the top right, you will find *New Project* button. Click on it.  *New Project* page appears. 
+Enter the details as described below. 
+
+** *Project Name*: Enter a suitable name for your project. 
+
+** *Project Description*: Enter a description for the project. 
+
+** *Project Visibility*: Keep it *Public* for any demos or poc's. If you are creating this in a multi-tenant environment, choose *Private*. 
+
+image::images/CML/project_creation_1.png[]
+
+* The *Initial Setup* for the project has five options as described below. Choose any of these based on your requirement. 
+
+** *Blank*: Choose this if you want to start from scratch. 
+
+** *Template*: Template projects contain example code that can help you get started with Cloudera Machine Learning. They are available in R, Python, PySpark, and Scala. Using a template project is not required, but it helps you start using Cloudera Machine Learning right away.
+
+** *AMPs*: Applied ML Prototypes provide components to create a complete project. They may include jobs, models and experiments. 
+
+** *Local Files*: Choose this if you have all the necessary files in a folder or in a zip. 
+
+** *Git*: Choose this if all the resources are stored in a github project. 
+
+image::images/CML/project_initial_setup.png[]
+
+* *Runtime Setup*: For inital exploration, select *Basic* and keep the kernel to *Python3.7*. 
+
+image::images/CML/project_runtime_setup.png[]
+
+* Click on *Create Project*. After some time, a new project will be created and will be 
+available on the *Projects* page. 
+
+image::images/CML/new_created_project.png[]
+
+=== Hadoop Authentication
+
+* Before starting any new session, you must complete the hadoop authentication part as it is kerberized. Go to *CML* home page and click on *User Settings* in the left pane. Click on *Hadoop Authentication*. 
+
+image::images/CML/hadoop_authentication.png[]
+
+* Enter the principal and keytab details of the LDAP user and click on *Authenticate*. 
+
+* Once the authentication is successful, proceed to the next step. 
+
+=== Explore CML IDEs
+
+* Go the the *Project* page and click on the newly created project and then click on *New Session* button on the top right. Explore CML by running the jobs with different IDEs like *Jupyterlab* and *Workbench*. 
+
+
+
+
+
+
 
 
 
