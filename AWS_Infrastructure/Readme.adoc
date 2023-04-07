@@ -833,26 +833,141 @@ Every time a new virtual cluster is created, there are a few manual steps that m
 
 [,shell]
 ----
-chmod +x /path/to/cdp-cde-utils.sh
+chmod +x /tmp/cde-latest/cdp-cde-utils.sh
 ----
 
 * Identify the virtual cluster endpoint:
 
-** 
+** On the CDE homepage, select the CDE service in which the virtual cluster is created. Click on the *pencil* icon on the virtual cluster to be configured. 
 
+image::images/CDE/cde_to_vc_details.png[]
 
-=== Configuring Users on CDE
+** Click *JOBS API URL* to copy the URL to your clipboard.
 
+image::images/CDE/vc_jobs_api.png[]
 
+** Paste the URL into a text editor to identify the endpoint host. 
 
+For example, if the URL is similar to the following:
+[,shell]
+----
+    http://dfdj6kgx.cde-2cdxw5x5.ecs-demo.example.com/dex/api/v1
+----
 
+Then the endpoint will then be as shown below. 
 
+*dfdj6kgx.cde-2cdxw5x5.ecs-demo.example.com*
+
+* Once you get the endpoint of the virtual cluster, login to the ECS master and navigate to */tmp/cde-latest* directory where the *cdp-cde-utils.sh* script is present. 
+
+* Generate a self-signed certificate with the below command. Replace the endpoint_host with the endpoint of your virtual cluster that you got from the previous step. 
+[,shell]
+----
+./cdp-cde-utils.sh init-virtual-cluster -h <endpoint_host> -a
+----
+For the example host we used above, this command will be as below. 
+[,shell]
+----
+./cdp-cde-utils.sh init-virtual-cluster -h dfdj6kgx.cde-2cdxw5x5.ecs-demo.example.com -a
+----
+
+* These steps must be performed for each virtual cluster you create. 
+
+=== Configuring LDAP Users on CDE
+
+This step is required to submit the jobs to CDE from the LDAP users. For more information on how to add users to FreeIPA, refer to <<Add_Users_on_IPA>>
+
+* Log in to the ECS master host and navigate to the directory */tmp/cde-latest*. 
+[,shell]
+----
+    cd /tmp/cde-latest
+----
+
+* Install *krb5-workstation* package using yum. 
+[,shell]
+----
+    yum install krb5-workstation -y
+----
+
+* Create a file named <username>.principal containing the user principal. As an example, we will consider *cdpuser* as the username. Here EXAMPLE.COM is the realm provided during IPA setup. You need to replace it with the realm you configured. 
+[,shell]
+----
+    cdpuser@EXAMPLE.COM
+----
+
+* Generate a keytab named <username>.keytab for the user using ktutil:
+[,shell]
+----
+sudo ktutil
+
+ktutil:  addent -password -p cdpuser@EXAMPLE.COM -k 1 -e aes256-cts
+Password for cdpuser@EXAMPLE.COM:  
+ktutil:  addent -password -p cdpuser@EXAMPLE.COM -k 2 -e aes128-cts
+Password for cdpuser@EXAMPLE.COM: 
+ktutil:  wkt cdpuser.keytab
+ktutil:  q
+----
+
+* Validate the keytab using klist. This command should the principals created with two encryptions provided above, namely aes256-cts and aes128-cts. 
+[,shell]
+----
+    klist -ekt cdpuser.keytab
+----
+
+* Validate the keytab using kinit. This command should get executed successfully. 
+[,shell]
+----
+    kinit -kt cdpuser.keytab cdpuser@EXAMPLE.COM
+----
+
+* Make sure that the keytab is valid before continuing. If the *kinit* command fails, the user will not be able to run jobs in the virtual cluster. After verifying that the kinit command succeeds, you can destroy the Kerberos ticket by running kdestroy. 
+
+* Use the cdp-cde-utils.sh script to copy the user keytab to the virtual cluster hosts. 
+
+[,shell]
+----
+    ./cdp-cde-utils.sh init-user-in-virtual-cluster -h <endpoint_host> -u <user> -p <principal_file> -k <keytab_file>
+----
+
+For the above example, the command would like below. 
+[,shell]
+----
+    ./cdp-cde-utils.sh init-user-in-virtual-cluster -h dfdj6kgx.cde-2cdxw5x5.ecs-demo.example.com -u cdpuser -p cdpuser.principal -k cdpuser.keytab
+----
+
+* Repeat these steps for all users that need to submit jobs to the virtual cluster. 
 
 == Cloudera Data Warehouse (*CDW*)
 
+
+
 == Cloudera Machine Learning (*CML*)
 
-== Enable and Configure *CDP Data Services*
+
+
+
+
+
+
+
+
+
+
+== Appendix
+
+=== Add users on FreeIPA [[Add_Users_on_IPA]]
+
+* Log in to IPA server and run kinit with admin and enter the password. 
+[,shell]
+----
+    kinit admin
+----
+
+* Run the below command to create a user. Enter the password in the password prompt. 
+[,shell]
+----
+ipa user-add --password <User Name>
+----
 
 ---
 *Authors*
