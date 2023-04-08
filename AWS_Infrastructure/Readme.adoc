@@ -387,7 +387,7 @@ default_ccache_name = KEYRING:persistent:%{uid}
 
 image::images/ipa_kerb_keyring.png[]
 
-* Post editing the config file, run the below command to restart all the IPA services. 
+* Post editing the config file, run the below commands to restart all the IPA services. 
 [,shell]
 ----
     ipactl stop
