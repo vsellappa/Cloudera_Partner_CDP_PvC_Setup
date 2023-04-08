@@ -623,6 +623,35 @@ image::images/cdp-quick-start-deployment-streams-install-cm-url.png[]
    * *C:* Click OK to exit the installer.
    
 image::images/cdp-quick-start-deployment-streams-install-finish.png[]   
+
+=== Setup Private Cloud Base Cluster
+
+In this step, we will setup the Base cluster which will serve as the DataLake for the CDP Data Services that need the SDK capabilities for the cluster wide features like lineage, governance, security etc..,
+
+==== Upload license file
+
+* Once the cloudera-manager(CM) installation is completed, open the endpoint shown in the previous steps, i.e., http://AWS_Elastic_IP_for_Cloudera_Manager:7180 and login to the CM using default credentials. 
+
+*Username*: admin
+
+*Password*: admin
+
+image::images/Base/cm_login.png[]
+
+The *Welcome to Cloudera Manager* page appears.
+
+* Since you would have received the CDP license before, select *Upload Cloudera Data Platform license* and upload the downloaded .txt or .zip file with the license information. 
+
+image::images/Base/cdp_license.png[]
+
+==== Enable Auto-TLS
+
+
+
+
+==== Set up KDC
+
+
    
 == Private Cloud Data Services Setup
 
@@ -1074,8 +1103,6 @@ image::images/CML/hadoop_authentication.png[]
 === Explore CML IDEs
 
 * Go the the *Project* page and click on the newly created project and then click on *New Session* button on the top right. Explore CML by running the jobs with different IDEs like *Jupyterlab* and *Workbench*. 
-
-
 
 
 
