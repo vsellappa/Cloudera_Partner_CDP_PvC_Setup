@@ -318,7 +318,7 @@ image::images/resolv_conf.png[]
 
 The file content must look similar to the below. 
 
-image:/AWS_Infrastructure/images/sysconfig_network.png[]
+image:images/sysconfig_network.png[]
 
 * Reboot the machine and verify the contents of */etc/resolv.conf* are unchanged and ensure that there is an entry of our nameserver. 
 
@@ -377,6 +377,22 @@ image::images/dig_A.png[]
 Sample output shown below. 
 
 image::images/dig_x.png[]
+
+* After the setup is complete, we need to make a kerberos config change which gets enabled automatically post the ipa server setup. Open the file */etc/krb5.conf* in edit mode and comment out the line related to *ccache_name* as shown below. 
+
+[,shell]
+----
+default_ccache_name = KEYRING:persistent:%{uid}
+----
+
+image::images/ipa_kerb_keyring.png[]
+
+* Post editing the config file, run the below command to restart all the IPA services. 
+[,shell]
+----
+    ipactl stop
+    ipactl start
+----
 
 === Add all the machines to the DNS server [[Cluster_Hosts]]
 
