@@ -775,9 +775,10 @@ image::images/Base/tls_enabled.png[]
 ----
 
 * We will use the host certificate for enabling SSL. Extract the host certificate from cm-auto-host_keystore.jks using keytool utility.
+
     [,shell]
     ----
-    
+
     /usr/java/jdk1.8.0_232-cloudera/jre/bin/keytool -export -alias <Base Master FQDN> -keystore cm-auto-host_keystore.jks -rfc -file cm.cert
     openssl rsa -in cm-auto-host_key.pem -out cm.key
     ----
