@@ -1016,7 +1016,7 @@ image::images/Base/green_inspect.png[]
 
 image::images/Base_cluster_setup/custom_services.png[]
 
-* Select the below Cloudera Services to be installed on the cluster. 
+* Select the below Cloudera Services to be installed on the cluster and click *Continue*. 
 
 ** Atlas	
 ** Solr
@@ -1031,11 +1031,128 @@ image::images/Base_cluster_setup/custom_services.png[]
 ** YARN	
 ** Zookeeper
 
-* Enter a common password in services such as Atlas and Ranger so that it becomes easier while using those services. 
+* Next, you need to assign hosts to different roles across all the selected services. Use the below table as a reference to assign the roles. 
 
-* Keep the roles of *HDFS NameaNode* and *Yarn Resource Manager* on the base master ec2 node. 
+[frame=all, grid=all]
+|===
+|Role Instance               |Host
 
-* Enter the values during the setup and click on *Continue*. 
+|*Kafka*                     | *Kafka Broker* - base-master
+
+|*Atlas*                     | *Atlas Server* - base-master
+
+|*Core Configuration*        | *Gateway* -  base-master
+
+|*HBase*                     |* *Master*  -  base-master
+
+                              * *RegionServer* - base-master
+
+|*HDFS*                      |* *NameNode*  - base-master
+
+                              * *DataNode*    - base-worker1, base-worker2, base-worker3
+                                 
+                              * *NodeManager* - base-worker1, base-worker2, base-worker3
+
+|*Hive*                      |* *Gateway* - base-worker1, base-worker2, base-worker3
+
+                              * *Metastore Server* - base-master
+
+|*Hive on Tez*               |* *Gateway*  - base-worker1, base-worker2, base-worker3
+ 
+                              * *HiveServer2* - base-master
+
+|*Cloudera Management Service* |* *Service Monitor* - base-master
+
+                                * *Host Monitor* - base-master
+
+                                * *Reports Manager* - base-master
+
+                                * *Event Server* - base-master
+
+                                * *Alert Publisher* - base-master
+
+|*Ozone*                       |* *Storage Container Manager* - base-master
+
+                                * *Ozone Manager* - base-master
+
+                                * *Ozone Recon* - base-master
+
+                                * *S3 Gateway* - base-master
+
+                                * *Gateway* - base-worker1, base-worker2, base-worker3
+
+                                * *Ozone DataNode* - base-worker1, base-worker2, base-worker3
+
+|*Ranger*                      |* *Ranger Admin* -  base-master
+
+                                * *Usersync* -  base-master
+
+                                * *Ranger Tagsync* - base-master
+
+|*Solr*                        |* *Solr Server* -  base-master
+
+|*Tez*                         |* *Gateway* - base-master
+
+|*YARN*                        |* *ResourceManager* - base-master
+
+                                * *JobHistory Server* - base-master
+
+                                * *NodeManager* - base-worker1, base-worker2, base-worker3
+
+|*ZooKeeper*                    |* *Server* - base-master
+
+|===
+
+* Click *Continue*. 
+
+* On the *Setup Database* page, select *Use Embedded Database*. 
+
+image::images/Base_cluster_setup/emb_db.png[]
+
+* Click on *Test Connection*. 
+
+image::images/Base_cluster_setup/test_con.png[]
+
+* Once the *Test Connection* succeeds, click on *Continue*. 
+
+* The *Enter Required Parameters* page appears. 
+
+** Enter a suitable name for *Ozone Service ID*. 
+
+** For all the remaining parameters, set a common password so that it becomes easier while using those services. 
+
+*This password must have 1 lowercase, 1 uppercase, and 1 numeric value. Failing to adhere this, the final step in the cluster setup would fail.*
+
+image::images/Base_cluster_setup/passwd.png[]
+
+* Click *Continue*. 
+
+* The *Review Changes* page appears. Set a password for *Atlas*. You can set it to the same value set for *Ranger* above. 
+
+image::images/Base_cluster_setup/atlas_passwd.png[]
+
+* Scroll down and update the *HDFS disks* configuration according to the below. 
+** DataNode Data Directory:
+** NameNode Data Directories: 
+** HDFS Checkpoint Directories: 
+
+image::images/Base_cluster_setup/hdfs_disks.png[]
+
+* Click *Continue*.     
+
+* On the next page, *Configure Kerberos*, *enable kerberos* and *use default kerberos principals*. 
+
+image::images/Base_cluster_setup/enable_kerberos.png[]
+
+image::images/Base_cluster_setup/default_kerb.png[]
+
+* A few set of commands are run in background. Wait for them to get executed successfully. Once done, click *Continue*. 
+
+image::images/Base_cluster_setup/cmds_1.1.png[]
+
+* All the Cloudera services would get started and their prerequisite operations would also be run. 
+
+
 
 * All the services would get installed and the cluster will be up and running. 
 
