@@ -846,7 +846,7 @@ tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log
 
 image::images/ipa_kerb_keyring.png[]
 
-* Post editing the config file, run the below commands to restart all the IPA services. 
+*If you have made any changes, only then run the below commands to restart all the IPA services. If not, skip to the next step.*
 [,shell]
 ----
     ipactl stop
