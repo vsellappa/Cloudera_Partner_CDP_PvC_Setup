@@ -837,6 +837,22 @@ tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log
 
 ==== Kerberos Integration
 
+* Before proceeding further with KDC setup, we need to ensure that the changes to krb5.conf related to default cache is not reversed. View the contents of the file */etc/krb5.conf* and check whether the property *default_ccache_name* is commented out. If not, then open the file and comment it. 
+
+[,shell]
+----
+#default_ccache_name = KEYRING:persistent:%{uid}
+----
+
+image::images/ipa_kerb_keyring.png[]
+
+* Post editing the config file, run the below commands to restart all the IPA services. 
+[,shell]
+----
+    ipactl stop
+    ipactl start
+----
+
 * Login to Cloudera Manager after enabling SSL on embedded DB. 
 
 * In the left pane, click on *Administration* and then on *Security*. 
