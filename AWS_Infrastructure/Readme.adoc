@@ -865,7 +865,7 @@ image::images/Base/kerb_setup_3.1.png[]
 
 image::images/Base/kerb_setup_4.png[]
 
-==== Set up KDC
+==== LDAP Integration
 
 * From Cloudera Manager, navigate to *Administration->Settings*. 
 
