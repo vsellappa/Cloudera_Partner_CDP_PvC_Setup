@@ -542,6 +542,13 @@ fi
 * Once the images got successfully downloaded, please proceed to the CDP Private Cloud Base setup.
 
 
+//....................................................................//
+//....................................................................//
+//.....................Preliminary Work complete......................//
+//....................................................................//
+//....................................................................//
+
+
 == Private Cloud Base Setup
 This section outlines the steps needed to set up a 4 nodes Private Cloud Base . Below are the prerequisites which base cluster should have before installing/configuring Data Services.
 
@@ -817,9 +824,89 @@ image::images/Base/admin_to_security.png[]
 
 image::images/Base/kerb_creds.png[]
 
+* On the first page enter details as below and click continue. 
 
+image::images/Base/kerb_setup_1.png[]
+
+* Enable *Manage krb5.conf through Cloudera Manager* option. 
+
+image::images/Base/kerb_setup_2.png[]
+
+* Next, enter the details as per the configuration of FreeIPA you did before. i.e., provide the domain and password of *admin* user configured earlier in the FreeIPA setup.
+
+image::images/Base/kerb_setup_3.png[]
+
+* KDC Account manager credentials should get imported successfully as shown below. 
+
+image::images/Base/kerb_setup_4.png[]
+
+==== Set up KDC
+
+* From Cloudera Manager, navigate to *Administration->Settings*. 
+
+image::images/Base/admin_settings.png[]
+
+* In the filter section, click on *External Authentication*. 
+
+image::images/Base/ldap_ext_auth.png[]
+
+* Enter details as per the below images. 
+
+image::images/Base/ldap_config_1.png[]
+
+** LDAP URL
+[,shell]
+----
+    ldap://<ipaserver_fqdn>>:389/
+----
+
+** LDAP Bind User Distinguished Name
+[,shell]
+----
+    uid=admin,cn=users,cn=accounts,dc=<domain>,dc=com
+Ex:- uid=admin,cn=users,cn=accounts,dc=cdppvcds,dc=com    
+----
+
+** LDAP Bind User Distinguished Name for monitoring
+[,shell]
+----
+    uid=admin,cn=users,cn=accounts,dc=<domain>,dc=com
+Ex:- uid=admin,cn=users,cn=accounts,dc=cdppvcds,dc=com
+----
+
+image::images/Base/ldap_config_2.png[]
+
+** LDAP User Search filter
+[,shell]
+----
+    (&(uid={0})(objectClass=person))
+----
+
+** LDAP User Search Base
+[,shell]
+----
+    cn=users,cn=accounts,dc=<domain>,dc=com
+Ex:- cn=users,cn=accounts,dc=pvcbase,dc=com
+----
+
+** LDAP Group Search filter
+[,shell]
+----
+    (&(member={1})(objectClass=posixgroup))
+----
+
+** LDAP Group Search Base
+[,shell]
+----
+    cn=groups,cn=accounts,dc=<domain>,dc=com
+Ex:- cn=groups,cn=accounts,dc=pvcbase,dc=com
+----
+
+* Click Save. 
 
 ==== Add hosts to Cloudera Managaer
+
+* Click on Add a new cluster. 
 
 * Enter a name for the cluster and click Continue.
 
@@ -836,24 +923,83 @@ image::images/Base/hosts_search.png[]
 * Verify host entries, deselect any that you do not want to install services on, and click Continue.
 The Select Repository section appears.
 
-* Select Custom Repository option and point to 7.9.5 . Refer to the below screenshot. 
+* Select Custom Repository option and point to 7.9.5. Refer to the below screenshot. 
 
 image::images/Base/custom_repo.png[]
 
+* Select Install a Cloudera-provided version of OpenJDK.
 
+image::images/Base/base_jdk.png[]
 
+* Click Continue. The Enter Login Credentials section appears. 
 
+* On the *Enter Login Credentials* page, select the SSH Username and provide the private key generated in <<Preliminary_Work>> section in Step1. Also, enter the passphrase entered while generating the key-pair. 
 
+image::images/ECS/enter_login_creds.png[]
 
+* The Install Agents section appears showing the progress of the installation.
 
+image::images/Base/install_agents.png[]
 
-==== Enable Auto-TLS
+* After the agents are installed, the *Install Parcels* section appears showing the progress of the parcel installation.
 
+image::images/Base/install_parcels.png[]
 
+* After the parcels are installed the *Inspect Cluster* section appears.
 
+image::images/Base/inspect_cluster.png[]
 
-==== Set up KDC
+* Do the following:
+a. Click *Inspect Network Performance*.
+** After the network inspector completes, click Show Inspector Results to view the results in a new tab. 
+Address any reported issues, and click Run Again.
 
+b. Click *Inspect Hosts*.
+** After the host inspector completes, click Show Inspector Results to view the results in a new tab.
+Address any reported issues, and click Run Again.
+
+c. Both the inspection tests should run successfully. 
+
+image::images/Base/green_inspect.png[]
+
+* Click *Continue*.
+
+==== Create Base Cluster(Datalake cluster for ECS)
+
+* The *Add Cluster - Configuration* page appears. Click on *Custom Services*. 
+
+image::images/Base_cluster_setup/custom_services.png[]
+
+* Select the below Cloudera Services to be installed on the cluster. 
+
+** Atlas	
+** Solr
+** HBase	
+** HDFS
+** Hive (For *Hive Metastore Server* only)
+** Hive_on_Tez (For *HiveServer2*)
+** Kafka
+** Ozone
+** Ranger	
+** Tez	
+** YARN	
+** Zookeeper
+
+* Enter a common password in services such as Atlas and Ranger so that it becomes easier while using those services. 
+
+* Keep the roles of *HDFS NameaNode* and *Yarn Resource Manager* on the base master ec2 node. 
+
+* Enter the values during the setup and click on *Continue*. 
+
+* All the services would get installed and the cluster will be up and running. 
+
+* All the services should be in *Healthy* state. If there are any instances in *Bad Health*, troubleshoot the same and fix it. 
+
+//....................................................................//
+//....................................................................//
+//........................Base setup complete.........................//
+//....................................................................//
+//....................................................................//
 
    
 == Private Cloud Data Services Setup
