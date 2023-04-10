@@ -1156,7 +1156,11 @@ image::images/Base_cluster_setup/cmd_1.1.png[]
 
 image::images/Base_cluster_setup/final_clust_setup_3.png[]
 
-* Click *Finish*. 
+* Click *Continue*. 
+
+* You will see a *Summary* page 
+
+image::images/Base_cluster_setup/clust_setup_summary.png[]
 
 
 * All the services would get installed and the cluster will be up and running. 
