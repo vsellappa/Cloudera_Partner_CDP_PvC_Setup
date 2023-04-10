@@ -1150,8 +1150,13 @@ image::images/Base_cluster_setup/default_kerb.png[]
 
 image::images/Base_cluster_setup/cmd_1.1.png[]
 
-* All the Cloudera services would get started and their prerequisite operations would also be run. 
+* Next, all the Cloudera services would get started and their prerequisite operations would also be run. These processes will run in a combination of serial and parallel processes. Wait for them to complete. 
 
+* Once completed, you will see a *Green* tick next to all the steps. 
+
+image::images/Base_cluster_setup/final_clust_setup_3.png[]
+
+* Click *Finish*. 
 
 
 * All the services would get installed and the cluster will be up and running. 
