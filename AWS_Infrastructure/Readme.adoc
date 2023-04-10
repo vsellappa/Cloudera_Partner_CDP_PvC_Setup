@@ -811,10 +811,14 @@ chown cloudera-scm:cloudera-scm cm.key
 chmod 600 cm.key
 ----
 
-* Edit the file *postgresql.conf* and change below parameters values and save the file. 
+* At the same location, */var/lib/cloudera-scm-server-db/data*, edit the file *postgresql.conf* and change below parameters values and save the file. 
 ** ssl = on
 ** ssl_cert_file = 'cm.cert'
 ** ssl_key_file = 'cm.key'
+
+*Ensure to uncomment these lines as they are commented out by default.*
+
+image::images/Base/postgres_conf.png[]
 
 * Start the embedded DB and Cloudera SCM Server. 
 [,shell]
