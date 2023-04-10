@@ -773,11 +773,18 @@ cd /var/lib/cloudera-scm-agent/agent-cert
 cat cm-auto-host_key.pw
 ----
 
-* We will use the host certificate for enabling SSL. Extract the host certificate from cm-auto-host_keystore.jks using keytool utility.
+* We will use the host certificate for enabling SSL. Extract the host certificate from cm-auto-host_keystore.jks using keytool utility. Place the Base master FQDN in the placeholder. 
 
 [,shell]
 ----
-/usr/java/jdk1.8.0_232-cloudera/jre/bin/keytool -export -alias <Base Master FQDN> -keystore cm-auto-host_keystore.jks -rfc -file cm.cert
+/usr/java/jdk1.8.0_232-cloudera/jre/bin/keytool -export -alias <Base Master FQDN> -keystore \
+cm-auto-host_keystore.jks -rfc -file cm.cert
+----
+
+*Ex:-*
+----
+/usr/java/jdk1.8.0_232-cloudera/jre/bin/keytool -export -alias cdpbase.cdppvcds.com -keystore \
+cm-auto-host_keystore.jks -rfc -file cm.cert
 ----
 
 ----
