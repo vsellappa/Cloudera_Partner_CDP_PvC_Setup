@@ -791,7 +791,17 @@ cm-auto-host_keystore.jks -rfc -file cm.cert
 openssl rsa -in cm-auto-host_key.pem -out cm.key
 ----
 
-* The above steps create a .cert and cm.key file in that location. Copy those files to the folder */var/lib/cloudera-scm-server-db/data/*. 
+* The above steps create a .cert and cm.key file in that location. 
+
+image::images/Base/cm_key_and_cm_cert.png[]
+
+* Copy those files to the folder */var/lib/cloudera-scm-server-db/data/*. 
+[,shell]
+----
+cp /var/lib/cloudera-scm-agent/agent-cert/cm.cert /var/lib/cloudera-scm-server-db/data/
+cp /var/lib/cloudera-scm-agent/agent-cert/cm.key /var/lib/cloudera-scm-server-db/data/
+----
+
 
 * Navigate to the folder /var/lib/cloudera-scm-server-db/data/ and change the owner:group to cloudera-scm:cloudera-scm with 600 permissions for *cm.key* file.
 [,shell]
