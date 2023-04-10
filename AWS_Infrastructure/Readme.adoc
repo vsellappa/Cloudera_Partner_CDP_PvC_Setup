@@ -834,7 +834,9 @@ image::images/Base/kerb_setup_2.png[]
 
 * Next, enter the details as per the configuration of FreeIPA you did before. i.e., provide the domain and password of *admin* user configured earlier in the FreeIPA setup.
 
-image::images/Base/kerb_setup_3.png[]
+*Enter the REALM portion of the principal in upper-case only to conform to Kerberos convention.*
+
+image::images/Base/kerb_setup_3.1.png[]
 
 * KDC Account manager credentials should get imported successfully as shown below. 
 
