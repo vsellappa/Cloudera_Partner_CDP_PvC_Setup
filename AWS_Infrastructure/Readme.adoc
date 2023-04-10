@@ -809,7 +809,13 @@ image::images/Base/tls_enabled.png[]
 
 * Login to Cloudera Manager after enabling SSL on embedded DB. 
 
-* 
+* In the left pane, click on *Administration* and then on *Security*. 
+
+image::images/Base/admin_to_security.png[]
+
+* Click on *Kerberos credentials* and then click on *Set up KDC for this Cloudera Manager*. 
+
+image::images/Base/kerb_creds.png[]
 
 
 
