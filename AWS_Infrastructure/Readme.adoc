@@ -882,7 +882,10 @@ image::images/Base/ldap_config_1.png[]
 ** LDAP URL
 [,shell]
 ----
-    ldap://<ipaserver_fqdn>>:389/
+ldap://<ipaserver_fqdn>>:389/
+
+Ex:- ldap://ipaserver.cdppvcds.com:389/
+
 ----
 
 ** LDAP Bind User Distinguished Name
