@@ -823,8 +823,8 @@ image::images/Base/postgres_conf.png[]
 * Start the embedded DB and Cloudera SCM Server. 
 [,shell]
 ----
-systemctl stop cloudera-scm-server-db
-systemctl stop cloudera-scm-server
+systemctl start cloudera-scm-server-db
+systemctl start cloudera-scm-server
 ----
 
 * Run the below command to check the logs of cloudera-scm-server starting up. Wait until you see the *Started Jetty server* message on the screen. 
