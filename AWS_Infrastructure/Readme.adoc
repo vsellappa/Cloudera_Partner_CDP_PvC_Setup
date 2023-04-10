@@ -1148,7 +1148,7 @@ image::images/Base_cluster_setup/default_kerb.png[]
 
 * A few set of commands are run in background. Wait for them to get executed successfully. Once done, click *Continue*. 
 
-image::images/Base_cluster_setup/cmds_1.1.png[]
+image::images/Base_cluster_setup/cmd_1.1.png[]
 
 * All the Cloudera services would get started and their prerequisite operations would also be run. 
 
