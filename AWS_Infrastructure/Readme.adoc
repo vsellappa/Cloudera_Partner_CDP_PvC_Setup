@@ -108,21 +108,21 @@ In this step, an AMI will be created which will serve as the base AMI to provisi
 * To verify the version, run the below command. It should return CentOS Linux release 7.9.2009 (Core). 
 [,shell]
 ----
-    cat /etc/centos-release
+cat /etc/centos-release
 ----
 image::images/centos_ver.png[]
 
 * If the output shows the version as Centos 7.6, then run the below command to update the OS to 7.9. Before updating, switch to root account. 
 [,shell]
 ----
-    sudo su - root
-    yum update -y
+sudo su - root
+yum update -y
 ----
 
 * Generate a password protected private key by using the below command and create a password for this private key by entering it when prompted. 
 [,shell]
 ----
-    ssh-keygen -t rsa  -f /root/.ssh/id_rsa_new
+ssh-keygen -t rsa  -f /root/.ssh/id_rsa_new
 ----
 
 image::images/ssh-keygen-pw.png[]
@@ -130,7 +130,7 @@ image::images/ssh-keygen-pw.png[]
 * Add the newly created key into authorized_keys by using below command. 
 [,shell]
 ----
-    cat /root/.ssh/id_rsa_new.pub >> /root/.ssh/authorized_keys
+cat /root/.ssh/id_rsa_new.pub >> /root/.ssh/authorized_keys
 ----
 
 * Download the *id_rsa_new* key file to your local machine by using sftp. This will be required at the time of installation.
@@ -153,8 +153,8 @@ image::images/selinux.png[]
 * *Set swappiness to 1:* Open the file */etc/sysctl.conf* for editing and add the below line.
 [,shell]
 ----
-    vi /etc/sysctl.conf
-    vm.swappiness=1
+vi /etc/sysctl.conf
+vm.swappiness=1
 ----
 
 image:images/swappiness.png[]
@@ -162,18 +162,18 @@ image:images/swappiness.png[]
 * *Disable Transparent Huge Pages:* Open the file */etc/rc.d/rc.local* for editing and add the below lines.
 [,shell]
 ----
-    vi /etc/rc.d/rc.local
-    echo never > /sys/kernel/mm/transparent_hugepage/enabled
-    echo never > /sys/kernel/mm/transparent_hugepage/defrag
+vi /etc/rc.d/rc.local
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
+echo never > /sys/kernel/mm/transparent_hugepage/defrag
 ----
 
 * *Disable IPV6:* Open the file */etc/rc.d/rc.local* for editing and add the below lines. 
 [,shell]
 ----
-    vi /etc/rc.d/rc.local
-    sysctl -w net.ipv6.conf.all.disable_ipv6=1
-    sysctl -w net.ipv6.conf.default.disable_ipv6=1
-    sysctl -w net.ipv6.conf.lo.disable_ipv6=0
+vi /etc/rc.d/rc.local
+sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sysctl -w net.ipv6.conf.default.disable_ipv6=1
+sysctl -w net.ipv6.conf.lo.disable_ipv6=0
 ----
 
 image::images/huge_page_ipv6.png[]
@@ -181,13 +181,13 @@ image::images/huge_page_ipv6.png[]
 * *Add execute permission:* Run the below command to add execute permission to the file */etc/rc.d/rc.local*. 
 [,shell]
 ----
-    chmod +x /etc/rc.d/rc.local
+chmod +x /etc/rc.d/rc.local
 ----
 
 * *Install packages:* Install the packages *_ipa-client_*, *_wget_*, *_ntpd_* through *yum* using the below command. 
 [,shell]
 ----     
-    yum install -y ipa-client wget ntpd
+yum install -y ipa-client wget ntpd
 ----
 
 ==== Step3 [[AMI_creation]]
@@ -294,13 +294,13 @@ In this step we will be setting up a reverse DNS zone on the FreeIPA server for 
 
 [,shell]
 ----
-    hostname -i
+hostname -i
 ----
 
 * Open the file */etc/resolv.conf* in edit mode and add the following. 
 [,shell]
 ----
-    nameserver <PRIVATE_IP_OF_IPASERVER>
+nameserver <PRIVATE_IP_OF_IPASERVER>
 ----
 
 Make sure the above is added above any other nameserver entry. The contents of the file must look similar to the below. 
@@ -310,10 +310,10 @@ image::images/resolv_conf.png[]
 * The above changes are temporary and would get overwritten if the machine is rebooted. In order to keep the nameserver entry persistent, open the file */etc/sysconfig/network* in edit mode and add below entries. 
 [,shell]
 ----
-    NETWORKING=yes
-    NISDOMAIN=<domain>
-    DNS1=<Private_IP_Of_IPA_Server>
-    NOZEROCONF=yes
+NETWORKING=yes
+NISDOMAIN=<domain>
+DNS1=<Private_IP_Of_IPA_Server>
+NOZEROCONF=yes
 ----
 
 The file content must look similar to the below. 
@@ -325,17 +325,17 @@ image:images/sysconfig_network.png[]
 * Run the below command to authenticate as admin through kadmin and enter the directory password. 
 [,shell]
 ----
-    kinit admin
+kinit admin
 ----
 
 * Take the CIDR block of the VPC in which the EC2 instances are created and create a reverse DNS zone by executing the below command on the IPA Server machine. 
 [,shell]
 ----
-    ipa dnszone-add --name-from-ip=<YOUR_VPC_CIDR>
+ipa dnszone-add --name-from-ip=<YOUR_VPC_CIDR>
 ----
 * If your VPC has a CIDR *172.31.0.0/16*, then the command looks as below. 
 ----
-    ipa dnszone-add --name-from-ip=172.31.0.0/16
+ipa dnszone-add --name-from-ip=172.31.0.0/16
 ----
 
 * Once you execute the above command, accept the default value by hitting the enter key. It will create a reverse DNS zone by name 31.172.in-addr.arpa. (with a trailing dot)
@@ -345,8 +345,8 @@ image::images/ipa_dns_zone_add.png[]
 * Add the entry of this IPA server machine to the reverse DNS zone . We need to add the IPV4 address in reverse order. The first two octets are already added in the reverse zone above. Now we need to create a record for this machine inside that zone . In the command below you need to add the record by providing the last two octets of your machine's private IPV4 in reverse order. Include the trailing dot after the machine name.
 [,shell]
 ----
-    ipa dnsrecord-add <2nd>.<1st>.in-addr.arpa. <4th>.<3rd> --ptr-rec <ipaserver FQDN>.
-    ipa dnsrecord-add 31.172.in-addr.arpa. 119.40 --ptr-rec ipaserver.cdppvcds.com.
+ipa dnsrecord-add <2nd>.<1st>.in-addr.arpa. <4th>.<3rd> --ptr-rec <ipaserver FQDN>.
+ipa dnsrecord-add 31.172.in-addr.arpa. 119.40 --ptr-rec ipaserver.cdppvcds.com.
 ----
 
 *Please note that there is a trailing dot after the IPASERVER FQDN in the above command.*
@@ -359,7 +359,7 @@ image::images/ipa_dnsrecord_add.png[]
 
 [,shell]
 ----
-     dig <FQDN of the IPASERVER> A
+dig <FQDN of the IPASERVER> A
 Ex:- dig ipaserver.cdppvcds.com A  
 ----
 
@@ -370,8 +370,8 @@ image::images/dig_A.png[]
 ** Verify the Reverse lookup by running the below command. This command should return the hostname of the machine in the *Answer* Section. 
 [,shell]
 ----
-     dig -x <Private_IP_of_IPASERVER>
-     dig -x 172.31.40.119
+dig -x <Private_IP_of_IPASERVER>
+dig -x 172.31.40.119
 ----
 
 Sample output shown below. 
@@ -403,7 +403,7 @@ The tasks in this step need to be performed on all Machines except the IPA Serve
 * Set the static hostname on each machine by using the command below. 
 [,shell]
 ----
-    sudo hostnamectl set-hostname --static <Hostname_with_Your_Domain>
+sudo hostnamectl set-hostname --static <Hostname_with_Your_Domain>
 ----
 
 * Either copy the */etc/resolv.conf* and */etc/sysconfig/network* file from the IPA server machine to all the machines or update manually on each machine to have the same configuration on all the hosts. 
@@ -411,7 +411,7 @@ The tasks in this step need to be performed on all Machines except the IPA Serve
 * On each machine run the below command to set up the IPA client. 
 [,shell]
 ----
-    ipa-client-install --force-ntpd
+ipa-client-install --force-ntpd
 ----
 
 * Enter the values for these parameters as below. After entering these values, it should return the message as "The ipa-client-install command was successful". 
@@ -430,7 +430,7 @@ image::images/ipa_client_install.png[]
 * Generate the kerberos ticket for admin by running the below command. 
 [,shell]
 ----
-    kinit admin
+kinit admin
 ----
 
 * Once the ipa-client configuration is successful we need to create a record in the Reverse DNS zone as well for each machine. Use the below command as reference and make changes as per your configuration/machine’s private IP and Hostname. 
@@ -459,7 +459,7 @@ image::images/ipa_dns_record_ipa_agent.png[]
 
 [,shell]
 ----
-     dig <FQDN of the IPAAGENT> A
+dig <FQDN of the IPAAGENT> A
 Ex:- dig cdpbase.cdppvcds.com A
 ----
 
@@ -470,8 +470,8 @@ image::images/dig_A_agent.png[]
 ** Verify the Reverse lookup by running the below command. This command should return the hostname of the machine in the *Answer* Section. 
 [,shell]
 ----
-     dig -x <Private_IP_of_IPAAGENT>
-     dig -x 172.31.0.234
+dig -x <Private_IP_of_IPAAGENT>
+dig -x 172.31.0.234
 ----
 
 Sample output shown below. 
@@ -485,26 +485,26 @@ This is an optional step however if performed, it can save a good amount of time
 * Identify any machine from the EC2 instances created before and install httpd by using the below command.  
 [,shell]
 ----
-    yum install -y httpd
+yum install -y httpd
 ----
 
 * Start the httpd service and enable it to run even after reboot with the commands below. 
 [,shell]
 ----
-    systemctl start httpd
-    systemctl enable httpd
+systemctl start httpd
+systemctl enable httpd
 ----
 
 * Create a directory to save the ECS images. 
 [,shell]
 ----
-    mkdir -p /var/www/html/cdp-pvc-ds
+mkdir -p /var/www/html/cdp-pvc-ds
 ----
 
 * Navigate to the above created directory and create a new shell script file with the below content. 
 [,shell]
 ----
-    vi download_ecs.sh
+vi download_ecs.sh
 ----
 
 * Copy the below script in the newly created file *download_ecs.sh*. 
@@ -529,14 +529,14 @@ fi
 * Run this script in nohup to keep the job running in background. 
 [,shell]
 ----
-    nohup sh download_ecs.sh > download_ecs.log &
+nohup sh download_ecs.sh > download_ecs.log &
 ----
 
 * This will take nearly 5-6 hours based on the network speed. Keep checking the logs of download_ecs.log and if you see the *Successfully downloaded* message, then it means all the images got downloaded successfully. To check the logs, you can use any of the below commands.  
 ,shell]
 ----
-    tail -f download_ecs.log
-    cat download_ecs.log
+tail -f download_ecs.log
+cat download_ecs.log
 ----
 
 * Once the images got successfully downloaded, please proceed to the CDP Private Cloud Base setup.
@@ -557,7 +557,7 @@ This section outlines the steps needed to set up a 4 nodes Private Cloud Base . 
 * *Step 2:* Navigate to */etc/yum.repos.d/* directory
 [,shell]
 ----
-   cd /etc/yum.repos.d/
+cd /etc/yum.repos.d/
 ----
 
 * *Step 3:* Execute below command after replacing your *Cloudera Paywall Credentials*.
@@ -676,7 +676,7 @@ image::images/Base/add_pvc_base_page.png[]
 * As a prerequisite step to enabling AutoTLS, login to the base master node as root, and run the below command to install cloudera-manager-agent. 
 [,shell]
 ----
-    yum install cloudera-manager-agent -y
+yum install cloudera-manager-agent -y
 ----
 image::images/Base/cm_agent_install.png[]
 
@@ -685,13 +685,13 @@ image::images/Base/cm_agent_install_complete.png[]
 * Once it is installed successfully, start and enable the *cloudera-scm-agent* service. 
 [,shell]
 ----
-    systemctl start cloudera-scm-agent && systemctl enable cloudera-scm-agent
+systemctl start cloudera-scm-agent && systemctl enable cloudera-scm-agent
 ----
 
 * Verify the same by running the below command. This should return the output stating the service is active and in running state. 
 [,shell]
 ----
-    systemctl status cloudera-scm-agent
+systemctl status cloudera-scm-agent
 ----
 image::images/Base/scm_agent_status.png[]
 
@@ -728,13 +728,13 @@ Click *Finish*.
 * Login to the base master host as root and run the below command as suggested in the previous screenshot. 
 [,shell]
 ----
-    systemctl restart cloudera-scm-server
+systemctl restart cloudera-scm-server
 ----
 
 * Run the below command to check the logs of cloudera-scm-server starting up. Wait until you see the *Started Jetty server* message on the screen. 
 [,shell]
 ----
-    tail -f /var/log/cloudera-scm-server/cloudera-scm-server.logscm-server.log
+tail -f /var/log/cloudera-scm-server/cloudera-scm-server.logscm-server.log
 ----
 image::images/Base/jetty_started.png[]
 
@@ -757,21 +757,20 @@ image::images/Base/tls_enabled.png[]
 * Stop Cloudera SCM server and Cloudera Embedded DB service. Please note that the order should not be changed. i.e., first the scm-server should be stopped and then the scm-server-db. 
 [,shell]
 ----
-    systemctl stop cloudera-scm-server
-    systemctl stop cloudera-scm-server-db
+systemctl stop cloudera-scm-server
+systemctl stop cloudera-scm-server-db
 ----
 
 * Navigate to /var/lib/cloudera-scm-agent/agent-cert directory. 
 [,shell]
 ----
-    cd /var/lib/cloudera-scm-agent/agent-cert
-
+cd /var/lib/cloudera-scm-agent/agent-cert
 ----
 
 * Get the password from the file *cm-auto-host_key.pw*. Note down this password in an editor. 
 [,shell]
 ----
-    cat cm-auto-host_key.pw
+cat cm-auto-host_key.pw
 ----
 
 * We will use the host certificate for enabling SSL. Extract the host certificate from cm-auto-host_keystore.jks using keytool utility.
@@ -788,9 +787,9 @@ openssl rsa -in cm-auto-host_key.pem -out cm.key
 * Navigate to the folder /var/lib/cloudera-scm-server-db/data/ and change the owner:group to cloudera-scm:cloudera-scm with 600 permissions for *cm.key* file.
 [,shell]
 ----
-    cd /var/lib/cloudera-scm-server-db/data
-    chown cloudera-scm:cloudera-scm cm.key
-    chmod 600 cm.key
+cd /var/lib/cloudera-scm-server-db/data
+chown cloudera-scm:cloudera-scm cm.key
+chmod 600 cm.key
 ----
 
 * Edit the file *postgresql.conf* and change below parameters values and save the file. 
@@ -801,14 +800,14 @@ openssl rsa -in cm-auto-host_key.pem -out cm.key
 * Start the embedded DB and Cloudera SCM Server. 
 [,shell]
 ----
-    systemctl stop cloudera-scm-server-db
-    systemctl stop cloudera-scm-server
+systemctl stop cloudera-scm-server-db
+systemctl stop cloudera-scm-server
 ----
 
 * Run the below command to check the logs of cloudera-scm-server starting up. Wait until you see the *Started Jetty server* message on the screen. 
 [,shell]
 ----
-    tail -f /var/log/cloudera-scm-server/cloudera-scm-server.logscm-server.log
+tail -f /var/log/cloudera-scm-server/cloudera-scm-server.logscm-server.log
 ----
 
 * The Cloudera Manager should come up. 
@@ -866,14 +865,16 @@ image::images/Base/ldap_config_1.png[]
 ** LDAP Bind User Distinguished Name
 [,shell]
 ----
-    uid=admin,cn=users,cn=accounts,dc=<domain>,dc=com
+uid=admin,cn=users,cn=accounts,dc=<domain>,dc=com
+
 Ex:- uid=admin,cn=users,cn=accounts,dc=cdppvcds,dc=com    
 ----
 
 ** LDAP Bind User Distinguished Name for monitoring
 [,shell]
 ----
-    uid=admin,cn=users,cn=accounts,dc=<domain>,dc=com
+uid=admin,cn=users,cn=accounts,dc=<domain>,dc=com
+
 Ex:- uid=admin,cn=users,cn=accounts,dc=cdppvcds,dc=com
 ----
 
@@ -882,26 +883,26 @@ image::images/Base/ldap_config_2.png[]
 ** LDAP User Search filter
 [,shell]
 ----
-    (&(uid={0})(objectClass=person))
+(&(uid={0})(objectClass=person))
 ----
 
 ** LDAP User Search Base
 [,shell]
 ----
-    cn=users,cn=accounts,dc=<domain>,dc=com
+cn=users,cn=accounts,dc=<domain>,dc=com
 Ex:- cn=users,cn=accounts,dc=pvcbase,dc=com
 ----
 
 ** LDAP Group Search filter
 [,shell]
 ----
-    (&(member={1})(objectClass=posixgroup))
+(&(member={1})(objectClass=posixgroup))
 ----
 
 ** LDAP Group Search Base
 [,shell]
 ----
-    cn=groups,cn=accounts,dc=<domain>,dc=com
+cn=groups,cn=accounts,dc=<domain>,dc=com
 Ex:- cn=groups,cn=accounts,dc=pvcbase,dc=com
 ----
 
@@ -1201,13 +1202,13 @@ Every time a new virtual cluster is created, there are a few manual steps that m
 * Run the below command to create a temporary directory and navigate to the same. 
 [,shell]
 ----
-    mkdir -p /tmp/cde-latest && cd /tmp/cde-latest
+mkdir -p /tmp/cde-latest && cd /tmp/cde-latest
 ----
 
 * Download the script https://docs.cloudera.com/data-engineering/1.5.0/cdp-cde-utils.sh[cdp-cde-utils] using wget. 
 [,shell]
 ----
-    wget https://docs.cloudera.com/data-engineering/1.5.0/cdp-cde-utils.sh
+wget https://docs.cloudera.com/data-engineering/1.5.0/cdp-cde-utils.sh
 ----
 
 * Add execute permission to this script. 
@@ -1232,7 +1233,7 @@ image::images/CDE/vc_jobs_api.png[]
 For example, if the URL is similar to the following:
 [,shell]
 ----
-    http://dfdj6kgx.cde-2cdxw5x5.ecs-demo.example.com/dex/api/v1
+http://dfdj6kgx.cde-2cdxw5x5.ecs-demo.example.com/dex/api/v1
 ----
 
 Then the endpoint will then be as shown below. 
@@ -1261,19 +1262,19 @@ This step is required to submit the jobs to CDE from the LDAP users. For more in
 * Log in to the ECS master host and navigate to the directory */tmp/cde-latest*. 
 [,shell]
 ----
-    cd /tmp/cde-latest
+cd /tmp/cde-latest
 ----
 
 * Install *krb5-workstation* package using yum. 
 [,shell]
 ----
-    yum install krb5-workstation -y
+yum install krb5-workstation -y
 ----
 
 * Create a file named <username>.principal containing the user principal. As an example, we will consider *cdpuser* as the username. Here EXAMPLE.COM is the realm provided during IPA setup. You need to replace it with the realm you configured. 
 [,shell]
 ----
-    cdpuser@EXAMPLE.COM
+cdpuser@EXAMPLE.COM
 ----
 
 * Generate a keytab named <username>.keytab for the user using ktutil:
@@ -1292,13 +1293,13 @@ ktutil:  q
 * Validate the keytab using klist. This command should the principals created with two encryptions provided above, namely aes256-cts and aes128-cts. 
 [,shell]
 ----
-    klist -ekt cdpuser.keytab
+klist -ekt cdpuser.keytab
 ----
 
 * Validate the keytab using kinit. This command should get executed successfully. 
 [,shell]
 ----
-    kinit -kt cdpuser.keytab cdpuser@EXAMPLE.COM
+kinit -kt cdpuser.keytab cdpuser@EXAMPLE.COM
 ----
 
 * Make sure that the keytab is valid before continuing. If the *kinit* command fails, the user will not be able to run jobs in the virtual cluster. After verifying that the kinit command succeeds, you can destroy the Kerberos ticket by running kdestroy. 
@@ -1307,13 +1308,13 @@ ktutil:  q
 
 [,shell]
 ----
-    ./cdp-cde-utils.sh init-user-in-virtual-cluster -h <endpoint_host> -u <user> -p <principal_file> -k <keytab_file>
+./cdp-cde-utils.sh init-user-in-virtual-cluster -h <endpoint_host> -u <user> -p <principal_file> -k <keytab_file>
 ----
 
 For the above example, the command would like below. 
 [,shell]
 ----
-    ./cdp-cde-utils.sh init-user-in-virtual-cluster -h dfdj6kgx.cde-2cdxw5x5.ecs-demo.example.com -u cdpuser -p cdpuser.principal -k cdpuser.keytab
+./cdp-cde-utils.sh init-user-in-virtual-cluster -h dfdj6kgx.cde-2cdxw5x5.ecs-demo.example.com -u cdpuser -p cdpuser.principal -k cdpuser.keytab
 ----
 
 * Repeat these steps for all users that need to submit jobs to the virtual cluster. 
@@ -1479,7 +1480,7 @@ image::images/CML/hadoop_authentication.png[]
 * Log in to IPA server and run kinit with admin and enter the password. 
 [,shell]
 ----
-    kinit admin
+kinit admin
 ----
 
 * Run the below command to create a user. Enter the password in the password prompt. 
