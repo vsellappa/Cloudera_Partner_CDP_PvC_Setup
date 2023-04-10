@@ -656,9 +656,190 @@ image::images/Base/cm_login.png[]
 
 The *Welcome to Cloudera Manager* page appears.
 
-* Since you would have received the CDP license before, select *Upload Cloudera Data Platform license* and upload the downloaded .txt or .zip file with the license information. 
+* Since you would have received the CDP license before, select *Upload Cloudera Data Platform license* and upload the downloaded .txt or .zip file with the license information. Click *Continue*. 
 
 image::images/Base/cdp_license.png[]
+
+The *Add Private Cloud Base Cluster* page appears. Next, we will enable AutoTLS for CM. 
+
+image::images/Base/add_pvc_base_page.png[]
+
+==== Install Cloudera-manager-agent
+
+* As a prerequisite step to enabling AutoTLS, login to the base master node as root, and run the below command to install cloudera-manager-agent. 
+[,shell]
+----
+    yum install cloudera-manager-agent -y
+----
+image::images/Base/cm_agent_install.png[]
+
+image::images/Base/cm_agent_install_complete.png[]
+
+* Once it is installed successfully, start and enable the *cloudera-scm-agent* service. 
+[,shell]
+----
+    systemctl start cloudera-scm-agent && systemctl enable cloudera-scm-agent
+----
+
+* Verify the same by running the below command. This should return the output stating the service is active and in running state. 
+[,shell]
+----
+    systemctl status cloudera-scm-agent
+----
+image::images/Base/scm_agent_status.png[]
+
+==== Enable Auto-TLS
+
+* Once the cloudera-scm-agent service is running successfully, switch to the Cloudera Manager screen on your browser and click on *here to setup Enable AutoTLS* on the *Add Private Cloud Base Cluster* page. 
+
+image::images/Base/auto_tls.png[]
+
+* Enter the values for the parameters as shown below. 
+[frame=all, grid=all]
+|===
+|Parameter                                                     |Value 
+
+|Enable TLS for              |All existing and future clusters
+|SSH username                |root
+|Authentication method       |All hosts accept same private key
+|Private Key                 |Choose the private key created in the Base AMI setup section
+|Enter the passphrase        |Enter the passphrase given at the time of key-pair creation
+|Confirm the passphrase      |Enter the passphrase again
+
+|===
+
+image::images/Base/auto_tls_param.png[]
+
+Click *Next*. 
+
+* You should see this page next if all the values are entered properly. 
+
+image::images/Base/tls_complete.png[]
+
+Click *Finish*.
+
+* Login to the base master host as root and run the below command as suggested in the previous screenshot. 
+[,shell]
+----
+    systemctl restart cloudera-scm-server
+----
+
+* Run the below command to check the logs of cloudera-scm-server starting up. Wait until you see the *Started Jetty server* message on the screen. 
+[,shell]
+----
+    tail -f /var/log/cloudera-scm-server/cloudera-scm-server.logscm-server.log
+----
+image::images/Base/jetty_started.png[]
+
+* Once you see this message on the logs, open the CM endpoint, http://AWS_Elastic_IP_for_Cloudera_Manager:7180, in a new incognito window. 
+
+* The URL should get redirected to *https* at *7183* port. This means that the *AutoTLS* configuration is successful. 
+
+You might get a warning message on the browser related to the certificate. You can ignore the warning and visit the website as this is not a signed certificate. 
+
+* Enter the default credentials and login. You should see AutoTLS enabled as shown in the image below. 
+
+image::images/Base/tls_enabled.png[]
+
+* Click *Continue* and continue with the cluster setup wizard. The Cluster Basics section appears.
+
+==== Enable SSL On Embedded DB
+
+* Login to the base master node. 
+
+* Stop Cloudera SCM server and Cloudera Embedded DB service. Please note that the order should not be changed. i.e., first the scm-server should be stopped and then the scm-server-db. 
+[,shell]
+----
+    systemctl stop cloudera-scm-server
+    systemctl stop cloudera-scm-server-db
+----
+
+* Navigate to /var/lib/cloudera-scm-agent/agent-cert directory. 
+[,shell]
+----
+    cd /var/lib/cloudera-scm-agent/agent-cert
+
+----
+
+* Get the password from the file *cm-auto-host_key.pw*. Note down this password in an editor. 
+[,shell]
+----
+    cat cm-auto-host_key.pw
+----
+
+* We will use the host certificate for enabling SSL. Extract the host certificate from cm-auto-host_keystore.jks using keytool utility.
+[,shell]
+----
+    /usr/java/jdk1.8.0_232-cloudera/jre/bin/keytool -export -alias pvcmaster.pvcbase.com -keystore cm-auto-host_keystore.jks -rfc -file cm.cert
+
+    openssl rsa -in cm-auto-host_key.pem -out cm.key
+----
+
+* The above steps create a .cert and cm.key file in that location. Copy those files to the folder */var/lib/cloudera-scm-server-db/data/*. 
+
+* Navigate to the folder /var/lib/cloudera-scm-server-db/data/ and change the owner:group to cloudera-scm:cloudera-scm with 600 permissions for *cm.key* file.
+[,shell]
+----
+    cd /var/lib/cloudera-scm-server-db/data
+    chown cloudera-scm:cloudera-scm cm.key
+    chmod 600 cm.key
+----
+
+* Edit the file *postgresql.conf* and change below parameters values and save the file. 
+** ssl = on
+** ssl_cert_file = 'cm.cert'
+** ssl_key_file = 'cm.key'
+
+* Start the embedded DB and Cloudera SCM Server. 
+[,shell]
+----
+    systemctl stop cloudera-scm-server-db
+    systemctl stop cloudera-scm-server
+----
+
+* Run the below command to check the logs of cloudera-scm-server starting up. Wait until you see the *Started Jetty server* message on the screen. 
+[,shell]
+----
+    tail -f /var/log/cloudera-scm-server/cloudera-scm-server.logscm-server.log
+----
+
+* The Cloudera Manager should come up. 
+
+==== Kerberos Integration
+
+* Login to Cloudera Manager after enabling SSL on embedded DB. 
+
+* 
+
+
+
+==== Add hosts to Cloudera Managaer
+
+* Enter a name for the cluster and click Continue.
+
+image::images/Base/cluster_setup.png[]
+
+* Enter the cluster host names or IP addresses in the Hostnames field. Click Search.
+
+image::images/Base/specify_hosts_new.png[]
+
+* Cloudera Manager discovers the hosts.
+
+image::images/Base/hosts_search.png[]
+
+* Verify host entries, deselect any that you do not want to install services on, and click Continue.
+The Select Repository section appears.
+
+* Select Custom Repository option and point to 7.9.5 . Refer to the below screenshot. 
+
+image::images/Base/custom_repo.png[]
+
+
+
+
+
+
+
 
 ==== Enable Auto-TLS
 
