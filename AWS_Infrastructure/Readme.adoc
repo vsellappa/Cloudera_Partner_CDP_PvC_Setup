@@ -1162,10 +1162,13 @@ image::images/Base_cluster_setup/final_clust_setup_3.png[]
 
 image::images/Base_cluster_setup/clust_setup_summary.png[]
 
+* Click *FInish*. 
 
-* All the services would get installed and the cluster will be up and running. 
+* This will navigate to the main page where you can see all the services installed. 
 
 * All the services should be in *Healthy* state. If there are any instances in *Bad Health*, troubleshoot the same and fix it. 
+
+* This completes the *CDP Private Cloud Base* cluster setup. 
 
 //....................................................................//
 //....................................................................//
