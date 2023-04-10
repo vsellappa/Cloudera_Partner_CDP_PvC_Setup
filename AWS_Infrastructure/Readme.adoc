@@ -830,7 +830,7 @@ systemctl start cloudera-scm-server
 * Run the below command to check the logs of cloudera-scm-server starting up. Wait until you see the *Started Jetty server* message on the screen. 
 [,shell]
 ----
-tail -f /var/log/cloudera-scm-server/cloudera-scm-server.logscm-server.log
+tail -f /var/log/cloudera-scm-server/cloudera-scm-server.log
 ----
 
 * The Cloudera Manager should come up. 
