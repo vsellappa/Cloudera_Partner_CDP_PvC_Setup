@@ -72,7 +72,7 @@ Below table summarizes the list of softwares/packages and their use for setting 
 The below table contains the names assigned to the EC2 instances and to some other required components. Going forward in this document will refer to them by name.
 
 
-*Note:* The hostnames mentioned here are just for convenience. You may choose to have the hostnames as per your requirements. 
+*Note:* The domain name, security group name, and the hostnames mentioned here are just for reference. You may choose to have the hostnames as per your requirements. 
 
 [frame=all, grid=all]
 |===
