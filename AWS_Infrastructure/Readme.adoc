@@ -13,9 +13,9 @@ This includes Data Hub powered by Cloudera Runtime, self-service experiences (Da
 
 *CDP Private Cloud* is an integrated analytics and data management platform deployed in *private data centers*. It consists of CDP Private Cloud Base and CDP Private Cloud Data Services and offers broad data analytics and artificial intelligence functionality along with secure user access and data governance features. CDP Private Cloud (PvC) data services components run on containerized cluster and thus requires a container orchestration engine to manage all the workloads. CDP PvC offers installation with two orchestration engines. 
 
-* Openshift Container Platform
+* *Openshift Container Platform*
 
-* Embedded Container Service (Cloudera managed)
+* *Embedded Container Service (Cloudera managed)*
 
 In this document, we focus on CDP Private Cloud setup with *ECS*. Let's have a look at the prerequisites before proceeding with the actual setup.
 
@@ -192,6 +192,8 @@ yum install -y ipa-client wget ntpd
 
 ==== Step3 [[AMI_creation]]
  
+
+
 * *Create AMI:* Open AWS console and create AMI of this machine. Once the AMI is in *"Available"* state, terminate this instance. 
 
 For all the EC2 instances to be created next, this AMI will be used. 
