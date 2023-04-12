@@ -1512,7 +1512,11 @@ image::images/CDW/low_res_mode.png[]
 
 === Create Virtual Warehouse
 
-* Once the environment is activated, click on *+* icon next to Virtual Warehouses. A *New Virtual Warehouse* tab appears on the same page. 
+* Once the environment is activated, a default *Database Catalog* gets created automatically. 
+
+image::images/CDW/default_dbc.png[]
+
+* Once the database catalog is created, click on *+* icon next to Virtual Warehouses. A *New Virtual Warehouse* tab appears on the same page. 
 
 ** Enter the name for the new virtual warehouse(*VW*). 
 
